@@ -1,5 +1,7 @@
+import 'package:chatapp_ferolin/views/contacts.dart';
 import 'package:chatapp_ferolin/views/profiles.dart';
 import 'package:flutter/material.dart';
+import '../partials/sizeconfig.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -10,37 +12,30 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   // static dynamic _argument = 'Default';
 
-  // void setIndexChat(){
-  //   setState(() {
-  //     _selectedIndex = 0;
-  //   });
-  // }
-
-  // void setIndexProfile(){
-  //   setState(() {
-  //     _selectedIndex = 1;
-  //   });
-  // }
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
-  Widget body(){
-    Widget bodyContent;
-    switch (_selectedIndex) {
-      case 0:
-        //Goes to the Chat Page
-        break;
-      case 1:
-        //Goes to the Profiles Page
-        return ProfilePage();
-        break;
-    }
-    // return bodyContent;
-  }
+  // Widget body(){
+  //   switch (_selectedIndex) {
+  //     case 0:
+  //       //Goes to the Chat Page
+  //       return ContactPage();
+  //       break;
+  //     case 1:
+  //       //Goes to the Profiles Page
+  //       return ProfilePage();
+  //       break;
+  //   }
+  //   // return bodyContent;
+  // }
+
+  final tabs = <StatefulWidget>[
+    ContactPage(),
+    ProfilePage()
+  ];
 
 
   @override
@@ -66,7 +61,7 @@ class _MainPageState extends State<MainPage> {
         // unselectedLabelStyle: TextStyle(color: Colors.cyan[300]),
         onTap: _onItemTapped,
       ),
-      body: body(),
+      body: tabs[_selectedIndex],
     );
   }
 }

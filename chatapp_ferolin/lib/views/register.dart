@@ -52,7 +52,9 @@ class _SignupPageState extends State<SignupPage> {
           if(input.length < 1 ){
             return "This field is required";
           }else if (input.length >=1 && input.length < 6){
-            return "Username is too short";
+            return "Username should be 6-20 characters long";
+          }else if(input.length >20){
+            return "Username should be at most 20 characters long";
           }else{
             return null;
           }

@@ -1,6 +1,7 @@
 // import 'package:chatapp_ferolin/views/register.dart';
 import 'package:chatapp_ferolin/partials/splashpage.dart';
 import 'package:chatapp_ferolin/views/mainpage.dart';
+import 'package:chatapp_ferolin/views/profiles.dart';
 import 'package:flutter/material.dart';
 import 'views/signin.dart';
 import 'views/register.dart';
@@ -15,39 +16,40 @@ void main(){
 
 
 // tester
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MainPage(),
-    );
-  }
-}
-
-
 // class MyApp extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
-//     return LayoutBuilder(
-//       builder: (context, constraints){
-//         return OrientationBuilder(
-//           builder: (context, orientation){
-//             SizeConfig().init(constraints, orientation);
-//             return MaterialApp(
-//               initialRoute: '/',
-//               routes: {
-//                 '/': (context) => Splash(),
-//                 '/login': (context) => LoginPage(),
-//                 '/register': (context) => SignupPage(),
-//               },
-//               // home: LoginPage(),
-//             );
-//           }
-//         );
-//       }
+//     return MaterialApp(
+//       home: MainPage(),
 //     );
 //   }
 // }
+
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints){
+        return OrientationBuilder(
+          builder: (context, orientation){
+            SizeConfig().init(constraints, orientation);
+            return MaterialApp(
+              initialRoute: '/',
+              routes: {
+                // '/': (context) => Splash(),
+                // '/login': (context) => LoginPage(),
+                // '/register': (context) => SignupPage(),
+                '/' : (context) => MainPage(),
+              },
+              // home: LoginPage(),
+            );
+          }
+        );
+      }
+    );
+  }
+}
 
 // class MyHomePage extends StatefulWidget {
 //   MyHomePage({Key key, this.title}) : super(key: key);
