@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "893015071335",
-    "project_id": "chatapp-ferolin",
-    "storage_bucket": "chatapp-ferolin.appspot.com"
+    "project_number": "1077897413200",
+    "project_id": "chatapp-ferolin-c110",
+    "storage_bucket": "chatapp-ferolin-c110.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:893015071335:android:8aa02f066c345c77b8d2c2",
+        "mobilesdk_app_id": "1:1077897413200:android:718fd6243d9f7ae8d78755",
         "android_client_info": {
-          "package_name": "chatapp.ferolin_01"
+          "package_name": "com.ferolin.chatapp_ferolin"
         }
       },
       "oauth_client": [
         {
-          "client_id": "893015071335-9po8eo3lopsjfkimn7cprb9i5qtkctmc.apps.googleusercontent.com",
+          "client_id": "1077897413200-uqhujfptj6bgvau3nbm12jhddrfqalo0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBsoAMjSzq7beMMl8U3oVvJxlEOwLor30Y"
+          "current_key": "AIzaSyC_39kICAsP86vwTrxJLIhRpK73BXhDvUs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "893015071335-9po8eo3lopsjfkimn7cprb9i5qtkctmc.apps.googleusercontent.com",
+              "client_id": "1077897413200-uqhujfptj6bgvau3nbm12jhddrfqalo0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

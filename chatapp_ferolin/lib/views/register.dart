@@ -49,9 +49,9 @@ class _SignupPageState extends State<SignupPage> {
       child: TextFormField(
         keyboardType: TextInputType.name,
         validator: (input){
-          if(input.length < 1 ){
+          if(input.isEmpty){
             return "This field is required";
-          }else if (input.length >=1 && input.length < 6){
+          }else if (input.isNotEmpty && input.length < 6){
             return "Username should be 6-20 characters long";
           }else if(input.length >20){
             return "Username should be at most 20 characters long";

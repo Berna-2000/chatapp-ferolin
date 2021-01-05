@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../partials/sizeconfig.dart';
+import '../common/packages.dart';
 
 class ContactPage extends StatefulWidget {
   @override

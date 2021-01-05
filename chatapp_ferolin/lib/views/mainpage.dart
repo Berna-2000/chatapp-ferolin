@@ -18,25 +18,10 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  // Widget body(){
-  //   switch (_selectedIndex) {
-  //     case 0:
-  //       //Goes to the Chat Page
-  //       return ContactPage();
-  //       break;
-  //     case 1:
-  //       //Goes to the Profiles Page
-  //       return ProfilePage();
-  //       break;
-  //   }
-  //   // return bodyContent;
-  // }
-
   final tabs = <StatefulWidget>[
     ContactPage(),
     ProfilePage()
   ];
-
 
   @override
   Widget build(BuildContext context) {

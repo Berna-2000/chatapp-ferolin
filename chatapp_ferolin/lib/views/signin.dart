@@ -24,9 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   // }
 
   Widget _buildHeaderWelcome(BuildContext context){
-    // final topPad = MediaQuery.of(context).size.height * 0.04;
     return Container(
-      // padding: EdgeInsets.only(top: topPad),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
