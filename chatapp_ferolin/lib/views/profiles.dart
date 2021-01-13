@@ -1,3 +1,4 @@
+import 'package:chatapp_ferolin/partials/confirmSignout.dart';
 import 'package:flutter/material.dart';
 import '../partials/sizeconfig.dart';
 
@@ -78,6 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: RaisedButton(
             onPressed: () {
               //some code to sign out 
+              confirmSignout(context);
             },
             elevation: 5.0,
             color: Color(0xffff1f1f1), 

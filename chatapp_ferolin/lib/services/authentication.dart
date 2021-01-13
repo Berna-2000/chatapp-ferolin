@@ -4,8 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthenticationMethods{
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  //Receives a User object and returns only the User ID
   UserClass _userFromFirebaseUser(User user){
-    return user != null ? UserClass(name: user.displayName, email: user.email, photo: user.photoURL, userId:user.uid): null;
+    return user != null ? UserClass(userId:user.uid): null;
   }
 
   //Auth change user stream
@@ -14,34 +15,37 @@ class AuthenticationMethods{
       .map(_userFromFirebaseUser);
   }
 
-  Future signinWithEmailandPassword(String email, String password) async{ 
+  //Sign in With Email and Password
+  Future signinWithEmailandPassword(String email, String password) async { 
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password
       );
-      User user = userCredential.user;
-      return _userFromFirebaseUser(user);
-    } on FirebaseAuthException catch (e) {
+      User firebaseUser = result.user;
+      return _userFromFirebaseUser(firebaseUser);
+    }on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
+      return null;
     }catch(e){
       print(e.toString());
       return null;
     }
   }
   
+  //Sign up with Custom Fields
   Future signupWithEmailAndPassword(String email, String password) async{
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password
       );
-      User user = userCredential.user;
-      return _userFromFirebaseUser(user);
+      User firebaseUser = result.user;
+      return _userFromFirebaseUser(firebaseUser);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -53,6 +57,7 @@ class AuthenticationMethods{
     }
   }
 
+  //Reset Password
   Future resetPassword(String email)async{
     try{
       return await _auth.sendPasswordResetEmail(email: email);
@@ -61,6 +66,19 @@ class AuthenticationMethods{
     }
   }
 
+  //Send Verification Email
+  Future verifyEmail(String email) async {
+    User user = _auth.currentUser;
+    try{
+      if (!user.emailVerified) {
+        await user.sendEmailVerification();
+      }
+    }catch(e){
+      print(e.toString());
+    }
+  }
+
+  //Sign Out Function
   Future signOut() async{
     try{
       return await _auth.signOut();
@@ -68,5 +86,4 @@ class AuthenticationMethods{
       print(e.toString());
     }
   }
-
 }

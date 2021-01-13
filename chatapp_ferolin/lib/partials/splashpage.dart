@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:chatapp_ferolin/views/signin.dart';
+import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../partials/sizeconfig.dart';
@@ -28,7 +29,7 @@ class _Splash extends State<Splash> {
                 );
               },
               pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation){
-                return LoginPage();
+                return Wrapper();
               }
             ),
           )

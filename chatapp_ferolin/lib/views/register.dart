@@ -1,17 +1,20 @@
+import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/partials/submitRegister.dart';
+import '../views/verify.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
 import '../partials/sizeconfig.dart';
 
 class SignupPage extends StatefulWidget {
-  SignupPage({Key key}) : super(key: key);
+  final Function toggleView;
+  SignupPage({this.toggleView});
   @override
   _SignupPageState createState() => _SignupPageState();
 }
 
 class _SignupPageState extends State<SignupPage> {
   String username, emailAddress, password, confirmPassword;
-  bool _isHidden = true;
+  bool _isHidden = true, isLoading = false;
   IconData iconP = Icons.remove_red_eye_sharp;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // final TextEditingController _passwordController = TextEditingController();
@@ -261,13 +264,17 @@ class _SignupPageState extends State<SignupPage> {
       children: [
         Container (
           height: 6 * SizeConfig.heightMultiplier,
-          // width: 0.8 * SizeConfig.screenWidth,
           width: 0.85 * MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(bottom: 0.0),
           child: RaisedButton(
             onPressed: () {
               //submit registration
-              submitRegister(context, _formKey);
+              setState(() {
+                isLoading = submitRegister(context, _formKey, username, emailAddress, password);
+                if(isLoading){
+                  //some code here
+                }
+              });
             },
             elevation: 5.0,
             color: Color(0xfff1976d2), 
@@ -304,7 +311,7 @@ class _SignupPageState extends State<SignupPage> {
           InkWell(
             onTap: () {
               //some code to go to the sign in page
-              Navigator.of(context).pop();
+              widget.toggleView();
             },
             child: Text(
               "Sign in",
@@ -367,7 +374,8 @@ class _SignupPageState extends State<SignupPage> {
     var loginLogo = 20 * SizeConfig.heightMultiplier;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
+      body: isLoading ? Loading() : 
+      SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [

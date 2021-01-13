@@ -5,7 +5,8 @@ import '../partials/sizeconfig.dart';
 import 'forgotPassword.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key}) : super(key: key);
+  final Function toggleView;
+  LoginPage({this.toggleView});
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -13,9 +14,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String emailAddress, password;
   bool _isHidden = true;
+  bool isLoading = false;
   IconData iconP = Icons.remove_red_eye_sharp;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  // final TextEditingController _passwordController = TextEditingController();
 
   // @override
   // void dispose(){
@@ -197,8 +198,11 @@ class _LoginPageState extends State<LoginPage> {
           width: 0.85 * MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(bottom: 0.0),
           child: RaisedButton(
-            onPressed: () {
-              submitLogin(context, _formKey);
+            onPressed: () async{
+              setState(() {
+                isLoading = true;
+              });
+              submitLogin(context, _formKey, emailAddress, password);
             },
             elevation: 5.0,
             color: Color(0xfff1976d2), 
@@ -235,7 +239,7 @@ class _LoginPageState extends State<LoginPage> {
           InkWell(
             onTap: () {
               //some code to go to the registration page
-              Navigator.pushNamed(context, '/register');
+              widget.toggleView();
             },
             child: Text(
               "Sign up",
