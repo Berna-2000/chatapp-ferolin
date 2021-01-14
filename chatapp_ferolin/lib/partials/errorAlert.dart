@@ -7,6 +7,8 @@ showErrorMessage(BuildContext context, String error){
   String content;
   if(error == "missing"){
     content = "Missing Fields.";
+  }else if (error == "email"){
+    content = "This e-mail address is already in use. Try another one.";
   }else{
     content = "E-mail not verified. Sent another verification email.";
   }

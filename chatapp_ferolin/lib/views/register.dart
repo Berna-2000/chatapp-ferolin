@@ -4,6 +4,9 @@ import '../views/verify.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
 import '../partials/sizeconfig.dart';
+import '../services/authentication.dart';
+import '../partials/errorAlert.dart';
+import '../controller/userController.dart';
 
 class SignupPage extends StatefulWidget {
   final Function toggleView;
@@ -267,14 +270,32 @@ class _SignupPageState extends State<SignupPage> {
           width: 0.85 * MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(bottom: 0.0),
           child: RaisedButton(
-            onPressed: () {
+            onPressed: () async {
               //submit registration
-              setState(() {
-                isLoading = submitRegister(context, _formKey, username, emailAddress, password);
-                if(isLoading){
-                  //some code here
+              String uid;
+              AuthenticationMethods authmethods = new AuthenticationMethods();
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                //Navigate to Home Page
+                try{
+                  dynamic result = await authmethods.signupWithEmailAndPassword(emailAddress, password);
+                  if (result == null){
+                    String error = "email";
+                    showErrorMessage(context, error);
+                  }else{
+                    setState(() {
+                      isLoading = true;
+                    });
+                    uid = "${result.userId}";
+                    UserController().createUser(uid, emailAddress, username);
+                  }
+                }catch(e){
+                  print(e.toString());
                 }
-              });
+              }else{
+                String error = "missing";
+                showErrorMessage(context, error);
+              }
             },
             elevation: 5.0,
             color: Color(0xfff1976d2), 

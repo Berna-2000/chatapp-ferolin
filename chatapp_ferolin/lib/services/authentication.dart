@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthenticationMethods{
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  UserClass defaultUser = new UserClass(userId: "00000");
 
   //Receives a User object and returns only the User ID
   UserClass _userFromFirebaseUser(User user){
@@ -40,7 +41,7 @@ class AuthenticationMethods{
   //Sign up with Custom Fields
   Future signupWithEmailAndPassword(String email, String password) async{
     try {
-      UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password
       );
@@ -52,8 +53,9 @@ class AuthenticationMethods{
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
       }
-    } catch (e) {
+    }catch (e) {
       print(e.toString());
+      return null;
     }
   }
 
