@@ -8,15 +8,18 @@ submitLogin(context, _formKey, emailAddress, password) async {
   if (_formKey.currentState.validate()) {
     _formKey.currentState.save();
 
-    final AuthenticationMethods _auth = AuthenticationMethods();
+    final AuthenticationMethods authMethods = AuthenticationMethods();
     //Calls on the email authentication
-    await _auth.signinWithEmailandPassword(emailAddress, password);
-    
-    //Navigate to Home Page
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => MainPage()),
-    // );
+    // await _auth.signinWithEmailandPassword(emailAddress, password);
+    // dynamic isVerified = authMethods.checkVerfiedEmail();
+    // if(isVerified != true){
+    //   String error = "verified";
+    //   showErrorMessage(context, error);
+    // }else{
+      authMethods.signinWithEmailandPassword(emailAddress, password);
+      Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context)=> MainPage()));
+    // }
   }else{
     String error = "missing";
     showErrorMessage(context, error);

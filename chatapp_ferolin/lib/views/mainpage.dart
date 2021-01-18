@@ -10,7 +10,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-  // static dynamic _argument = 'Default';
 
   void _onItemTapped(int index) {
     setState(() {

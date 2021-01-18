@@ -1,4 +1,5 @@
 import 'package:chatapp_ferolin/partials/confirmSignout.dart';
+import 'package:chatapp_ferolin/services/authentication.dart';
 import 'package:flutter/material.dart';
 import '../partials/sizeconfig.dart';
 
@@ -8,6 +9,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final AuthenticationMethods authMethods = new AuthenticationMethods();
 
   Widget _buildProfilePhoto(){
     return Container(
@@ -77,9 +79,10 @@ class _ProfilePageState extends State<ProfilePage> {
           height: 6 * SizeConfig.heightMultiplier,
           width: 0.85 * MediaQuery.of(context).size.width,
           child: RaisedButton(
-            onPressed: () {
+            onPressed: () async {
               //some code to sign out 
-              confirmSignout(context);
+              // confirmSignout(context);
+              await authMethods.signOut();
             },
             elevation: 5.0,
             color: Color(0xffff1f1f1), 

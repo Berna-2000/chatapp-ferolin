@@ -69,7 +69,7 @@ class AuthenticationMethods{
   }
 
   //Send Verification Email
-  Future verifyEmail(String email) async {
+  Future verifyEmail() async {
     User user = _auth.currentUser;
     try{
       if (!user.emailVerified) {
@@ -80,12 +80,28 @@ class AuthenticationMethods{
     }
   }
 
+  //Check if email is verified
+  Future <bool> checkVerfiedEmail() async{
+    User user = _auth.currentUser;
+    await user.reload();
+    bool output = user.emailVerified;
+    print(output);
+    if(output == true){
+      print("THE EMAIL IS VERFIIED");
+      return true;
+    }else{
+      print("##########THE EMAIL IS NOT VERFIIED");
+      return false;
+    }
+  }
+
   //Sign Out Function
   Future signOut() async{
     try{
       return await _auth.signOut();
     }catch(e){
       print(e.toString());
+      return null;
     }
   }
 }

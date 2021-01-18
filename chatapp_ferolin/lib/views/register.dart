@@ -1,5 +1,4 @@
 import 'package:chatapp_ferolin/partials/loadingPage.dart';
-import 'package:chatapp_ferolin/partials/submitRegister.dart';
 import '../views/verify.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
@@ -19,6 +18,8 @@ class _SignupPageState extends State<SignupPage> {
   String username, emailAddress, password, confirmPassword;
   bool _isHidden = true, isLoading = false;
   IconData iconP = Icons.remove_red_eye_sharp;
+  User user;
+  final _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // final TextEditingController _passwordController = TextEditingController();
 
@@ -29,9 +30,7 @@ class _SignupPageState extends State<SignupPage> {
   // }
 
   Widget _buildHeaderWelcome(BuildContext context){
-    // final topPad = MediaQuery.of(context).size.height * 0.04;
     return Container(
-      // padding: EdgeInsets.only(top: topPad),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -288,6 +287,8 @@ class _SignupPageState extends State<SignupPage> {
                     });
                     uid = "${result.userId}";
                     UserController().createUser(uid, emailAddress, username);
+                    Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context)=>VerifyPage()));
                   }
                 }catch(e){
                   print(e.toString());
@@ -463,7 +464,6 @@ class _SignupPageState extends State<SignupPage> {
           ),
         ),
       ),
-    );
-  
+    );  
   }
 }

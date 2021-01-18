@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../partials/sizeconfig.dart';
+import '../services/authentication.dart';
 
 
 showErrorMessage(BuildContext context, String error){
+  final AuthenticationMethods authMethods = new AuthenticationMethods();
   String content;
   if(error == "missing"){
     content = "Missing Fields.";
@@ -41,6 +43,10 @@ showErrorMessage(BuildContext context, String error){
               )
             ),
             onPressed: () {
+              if(error!="missing" && error!="email"){
+                //sends another verification email
+                authMethods.verifyEmail();
+              }
               Navigator.of(context).pop();
             },
           )

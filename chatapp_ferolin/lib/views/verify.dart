@@ -1,6 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+import 'package:chatapp_ferolin/partials/loadingPage.dart';
+import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import '../services/authentication.dart';
+import '../partials/sizeconfig.dart';
+import '../common/packages.dart';
+
 
 class VerifyPage extends StatefulWidget {
   @override
@@ -8,12 +13,74 @@ class VerifyPage extends StatefulWidget {
 }
 
 class _VerifyPageState extends State<VerifyPage> {
+  
+  Timer timer;
+  User user;
+  final _auth = FirebaseAuth.instance;
+  AuthenticationMethods authMethods = new AuthenticationMethods();
+
+  @override
+  void initState(){
+    user = _auth.currentUser;
+    user.sendEmailVerification();
+    timer = Timer.periodic(Duration(seconds: 5), (timer) { 
+     checkEmailVerified();
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose(){
+    timer.cancel();
+    super.dispose();
+  }
+
+  Widget _buildVerificationMessage(){
+    return Center(
+      child:Text(
+        "A verification e-mail has been sent to ${user.email}",
+        style: TextStyle(
+          fontSize: 2 * SizeConfig.textMultiplier,
+          fontFamily: "Montserrat",
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+    return Scaffold(
+      backgroundColor: Color(0xffffafafa),
+      body: Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(20.0),
+        height: SizeConfig.screenHeight,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildVerificationMessage(),
+              SizedBox(height: 15 * SizeConfig.heightMultiplier),
+              SpinKitChasingDots(color: Colors.tealAccent[200]),
+            ],
+          ),
+        ),
+      ),
     );
+  }
+
+  Future <void> checkEmailVerified() async {
+    user = _auth.currentUser;
+    await user.reload();
+    if(user.emailVerified){
+      setState(() {
+        timer.cancel();
+      });
+      Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper()));
+    }
   }
 }
 

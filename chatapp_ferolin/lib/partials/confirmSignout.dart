@@ -1,4 +1,6 @@
 import 'package:chatapp_ferolin/partials/loadingPage.dart';
+import 'package:chatapp_ferolin/views/authenticate/authenticate.dart';
+import 'package:chatapp_ferolin/views/mainpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../partials/sizeconfig.dart';
@@ -6,6 +8,7 @@ import '../services/authentication.dart';
 
 
 confirmSignout(BuildContext context){
+  final AuthenticationMethods authmethods = new AuthenticationMethods();
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -46,11 +49,12 @@ confirmSignout(BuildContext context){
                 fontFamily: "Montserrat"
               )
             ),
-            onPressed: () {
+            onPressed: () async {
               //code to actually sign out
-              AuthenticationMethods authmethods = new AuthenticationMethods();
               Navigator.of(context).pop();
-              authmethods.signOut();
+              await authmethods.signOut();
+              // Navigator.of(context)
+              //   .pushReplacement(MaterialPageRoute(builder: (context)=> Authenticate()));
             },
           ),
         ]

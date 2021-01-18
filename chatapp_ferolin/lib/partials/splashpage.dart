@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:chatapp_ferolin/views/signin.dart';
 import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -15,25 +14,10 @@ class _Splash extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 5), ()=> Navigator.push(
-            context,
-            PageRouteBuilder(
-              transitionDuration: Duration(seconds: 3),
-              transitionsBuilder: (BuildContext context, Animation<double> animation, 
-                                    Animation<double> secAnimation, Widget child){
-                animation = CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
-                return ScaleTransition(
-                  alignment: Alignment.center,
-                  scale: animation,
-                  child: child,
-                );
-              },
-              pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation){
-                return Wrapper();
-              }
-            ),
-          )
-        );
+    Timer(Duration(seconds: 5), ()=> Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context)=> Wrapper())
+      )
+    );
   }
 
   @override
@@ -52,7 +36,7 @@ class _Splash extends State<Splash> {
               ),
           ),
           SizedBox(height: SizeConfig.heightMultiplier),
-          SpinKitPulse(color: Colors.tealAccent[200]),
+          SpinKitChasingDots(color: Colors.tealAccent[200]),
         ],
       )
     );

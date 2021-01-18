@@ -11,7 +11,7 @@ class Loading extends StatelessWidget {
       height: SizeConfig.screenHeight,
       color: Colors.white,
       child: Center(
-        child: SpinKitPulse(color: Colors.tealAccent[200]),
+        child: SpinKitChasingDots(color: Colors.tealAccent[200]),
       ),
     );
   }
