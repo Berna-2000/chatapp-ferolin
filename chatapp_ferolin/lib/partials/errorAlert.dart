@@ -11,6 +11,8 @@ showErrorMessage(BuildContext context, String error){
     content = "Missing Fields.";
   }else if (error == "email"){
     content = "This e-mail address is already in use. Try another one.";
+  }else if (error == "account"){
+    content = "No account exists for the given e-mail address. Check your inputs.";
   }else{
     content = "E-mail not verified. Sent another verification email.";
   }
@@ -43,7 +45,7 @@ showErrorMessage(BuildContext context, String error){
               )
             ),
             onPressed: () {
-              if(error!="missing" && error!="email"){
+              if(error!="missing" && error!="email" && error!="account"){
                 //sends another verification email
                 authMethods.verifyEmail();
               }

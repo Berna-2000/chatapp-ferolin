@@ -1,4 +1,5 @@
 import 'package:chatapp_ferolin/partials/loadingPage.dart';
+import 'package:chatapp_ferolin/partials/successAlert.dart';
 import '../views/verify.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
@@ -287,8 +288,8 @@ class _SignupPageState extends State<SignupPage> {
                     });
                     uid = "${result.userId}";
                     UserController().createUser(uid, emailAddress, username);
-                    Navigator.of(context)
-                      .pushReplacement(MaterialPageRoute(builder: (context)=>VerifyPage()));
+                    String success = "verify";
+                    showSuccessMessage(context, success);
                   }
                 }catch(e){
                   print(e.toString());

@@ -1,4 +1,5 @@
 import 'package:chatapp_ferolin/views/changePassword.dart';
+import 'package:chatapp_ferolin/views/verify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../partials/sizeconfig.dart';
@@ -48,6 +49,9 @@ showSuccessMessage(BuildContext context, String success){
                   context,
                   MaterialPageRoute(builder: (context) => ChangePasswordPage()),
                 );
+              }else if (success == "verify"){
+                Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (context)=>VerifyPage()));
               }else{
                 Navigator.of(context).pop();
                 //do something to update the password

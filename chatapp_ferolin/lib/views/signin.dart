@@ -1,8 +1,11 @@
+import 'package:chatapp_ferolin/partials/loadingPage.dart';
+import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
-import '../partials/submitLogin.dart';
 import '../partials/sizeconfig.dart';
 import 'forgotPassword.dart';
+import '../services/authentication.dart';
+import '../partials/errorAlert.dart';
 
 class LoginPage extends StatefulWidget {
   final Function toggleView;
@@ -199,10 +202,35 @@ class _LoginPageState extends State<LoginPage> {
           margin: EdgeInsets.only(bottom: 0.0),
           child: RaisedButton(
             onPressed: () async{
-              setState(() {
-                isLoading = true;
-              });
-              submitLogin(context, _formKey, emailAddress, password);
+              // setState(() {
+              //   isLoading = true;
+              // });
+              // submitLogin(context, _formKey, emailAddress, password);
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                final AuthenticationMethods authMethods = AuthenticationMethods();
+                //Calls on the email authentication
+                dynamic result = await authMethods.signinWithEmailandPassword(emailAddress, password);
+                if(result == null){
+                  String error = "account";
+                  showErrorMessage(context, error);
+                }else{
+                  dynamic isVerified = await authMethods.checkVerfiedEmail();
+                  print(isVerified);
+                  if(isVerified != true){
+                    //TODO: something to do when the email is not verified
+                    String error = "verified";
+                    showErrorMessage(context, error);
+                  }else{
+                    //TODO: something to do when the email is verified
+                    Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
+                  }
+                } 
+              }else{
+                String error = "missing";
+                showErrorMessage(context, error);
+              }
             },
             elevation: 5.0,
             color: Color(0xfff1976d2), 
@@ -303,7 +331,8 @@ class _LoginPageState extends State<LoginPage> {
     var loginLogo = 20 * SizeConfig.heightMultiplier;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
+      body: isLoading ? Loading() : 
+      SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [

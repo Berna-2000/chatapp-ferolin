@@ -81,8 +81,8 @@ class _ProfilePageState extends State<ProfilePage> {
           child: RaisedButton(
             onPressed: () async {
               //some code to sign out 
-              // confirmSignout(context);
-              await authMethods.signOut();
+              confirmSignout(context);
+              // await authMethods.signOut();
             },
             elevation: 5.0,
             color: Color(0xffff1f1f1), 

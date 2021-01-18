@@ -51,8 +51,8 @@ confirmSignout(BuildContext context){
             ),
             onPressed: () async {
               //code to actually sign out
-              Navigator.of(context).pop();
               await authmethods.signOut();
+              Navigator.of(context).pop();
               // Navigator.of(context)
               //   .pushReplacement(MaterialPageRoute(builder: (context)=> Authenticate()));
             },

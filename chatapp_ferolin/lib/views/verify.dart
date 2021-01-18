@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
-import '../services/authentication.dart';
 import '../partials/sizeconfig.dart';
 import '../common/packages.dart';
 
@@ -17,7 +15,6 @@ class _VerifyPageState extends State<VerifyPage> {
   Timer timer;
   User user;
   final _auth = FirebaseAuth.instance;
-  AuthenticationMethods authMethods = new AuthenticationMethods();
 
   @override
   void initState(){
@@ -62,7 +59,7 @@ class _VerifyPageState extends State<VerifyPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _buildVerificationMessage(),
-              SizedBox(height: 15 * SizeConfig.heightMultiplier),
+              SizedBox(height: 2 * SizeConfig.heightMultiplier),
               SpinKitChasingDots(color: Colors.tealAccent[200]),
             ],
           ),

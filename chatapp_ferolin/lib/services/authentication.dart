@@ -87,10 +87,8 @@ class AuthenticationMethods{
     bool output = user.emailVerified;
     print(output);
     if(output == true){
-      print("THE EMAIL IS VERFIIED");
       return true;
     }else{
-      print("##########THE EMAIL IS NOT VERFIIED");
       return false;
     }
   }
