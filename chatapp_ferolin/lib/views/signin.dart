@@ -1,6 +1,7 @@
 import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../common/packages.dart';
 import '../partials/sizeconfig.dart';
 import 'forgotPassword.dart';
@@ -202,9 +203,6 @@ class _LoginPageState extends State<LoginPage> {
           margin: EdgeInsets.only(bottom: 0.0),
           child: RaisedButton(
             onPressed: () async{
-              // setState(() {
-              //   isLoading = true;
-              // });
               // submitLogin(context, _formKey, emailAddress, password);
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
@@ -215,11 +213,15 @@ class _LoginPageState extends State<LoginPage> {
                   String error = "account";
                   showErrorMessage(context, error);
                 }else{
+                  setState(() {
+                    isLoading = true;
+                  });
                   dynamic isVerified = await authMethods.checkVerfiedEmail();
-                  print(isVerified);
                   if(isVerified != true){
                     String error = "verified";
                     showErrorMessage(context, error);
+                    Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
                   }else{
                     Navigator.of(context)
                       .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));

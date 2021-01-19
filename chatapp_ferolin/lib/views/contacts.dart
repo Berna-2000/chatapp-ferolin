@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../partials/sizeconfig.dart';
 import '../common/packages.dart';
 
@@ -10,7 +11,8 @@ class ContactPage extends StatefulWidget {
 class _ContactPageState extends State<ContactPage> {
   
   String searchEmail;
-  bool isFocused = false;
+  bool isEmpty = true;
+  final searchHolder = TextEditingController();
 
   Widget _buildSearchBar(){
     return Row(
@@ -18,22 +20,35 @@ class _ContactPageState extends State<ContactPage> {
         Form(
           child: Expanded(
             child: TextFormField(
+              controller: searchHolder,
               textInputAction: TextInputAction.search,
               onSaved: (input) => searchEmail = input,
               onChanged: (value){
+                if(value.isNotEmpty){
+                  isEmpty = false;
+                  print("The field is no longer Empty");
+                }else{
+                  isEmpty = true;
+                  print("It became empty again");
+                }
                 setState(() {
-                  isFocused = !isFocused;
                   searchEmail = value;
                 });
               },
+              onFieldSubmitted: (input) {
+                //TODO: some code to search for the user here
+              },
               decoration: InputDecoration(
-                suffixIcon: IconButton(
+                suffixIcon: isEmpty ? Icon(Icons.search_outlined) : 
+                IconButton(
                   onPressed: () {
                     setState(() {
-                      //TODO: search bar function
+                      //Clears the search bar on click
+                      searchHolder.clear();
+                      isEmpty = true;
                     });
                   },
-                  icon: !isFocused ? Icon(Icons.search_rounded): Icon(Icons.cancel),
+                  icon: Icon(Icons.cancel),
                 ),
                 hintText: 'Search user email',
                 enabledBorder: OutlineInputBorder(
@@ -52,6 +67,23 @@ class _ContactPageState extends State<ContactPage> {
     );
   }
 
+  _buildEmptyListContact(){
+    return Container(
+      height: SizeConfig.screenHeight * 0.8,
+      padding: EdgeInsets.all(20.0),
+      child: Center(
+        child: Text(
+          "You have no contacts as of the moment.",
+          style: TextStyle(
+            fontFamily: "Montserrat",
+            fontSize: 3 * SizeConfig.textMultiplier,
+          ),
+          textAlign: TextAlign.center,
+        )
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,13 +92,13 @@ class _ContactPageState extends State<ContactPage> {
         child: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.all(20.0),
-            height: SizeConfig.screenHeight*0.85,
             width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildSearchBar(),
+                _buildEmptyListContact(),
               ],
             )
           ),

@@ -277,6 +277,9 @@ class _SignupPageState extends State<SignupPage> {
               AuthenticationMethods authmethods = new AuthenticationMethods();
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
+                setState(() {
+                  isLoading = true;
+                });
                 //Navigate to Home Page
                 try{
                   dynamic result = await authmethods.signupWithEmailAndPassword(emailAddress, password);
@@ -284,9 +287,6 @@ class _SignupPageState extends State<SignupPage> {
                     String error = "email";
                     showErrorMessage(context, error);
                   }else{
-                    setState(() {
-                      isLoading = true;
-                    });
                     uid = "${result.uid}";
                     await authmethods.updateProfile(username, photo);
                     UserController().createUser(uid, emailAddress, username);
