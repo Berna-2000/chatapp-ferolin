@@ -1,5 +1,6 @@
 import 'package:chatapp_ferolin/common/packages.dart';
 import 'package:chatapp_ferolin/partials/confirmSignout.dart';
+import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/services/authentication.dart';
 import 'package:flutter/material.dart';
 import '../partials/sizeconfig.dart';
@@ -14,6 +15,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String name = "Default User", 
          emailAddress = "defaultuser@email.com", 
          displayPhoto = "";
+  bool isLoading = false;
 
   Widget _buildProfilePhoto(displayPhoto){
     return Container(
@@ -84,9 +86,64 @@ class _ProfilePageState extends State<ProfilePage> {
           width: 0.85 * MediaQuery.of(context).size.width,
           child: RaisedButton(
             onPressed: () async {
+              setState(() {
+                isLoading = true;
+              });
               //some code to sign out 
-              confirmSignout(context);
-              // await authMethods.signOut();
+              final AuthenticationMethods authmethods = new AuthenticationMethods();
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                      'Sign Out?',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Montserrat"
+                      )
+                    ),
+                    content: Text(
+                      'Are you sure you want to sign out?',
+                      style: TextStyle(
+                        fontSize: 2 * SizeConfig.textMultiplier,
+                        fontFamily: "Montserrat"
+                      )
+                    ),
+                    actions: [
+                      FlatButton(
+                        child: Text(
+                          'No',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: "Montserrat"
+                          )
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isLoading = false;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      FlatButton(
+                        child: Text(
+                          'YES',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontFamily: "Montserrat"
+                          )
+                        ),
+                        onPressed: () async {
+                          //code to actually sign out
+                          await authmethods.signOut();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ]
+                  );
+                }
+              );
             },
             elevation: 5.0,
             color: Color(0xffff1f1f1), 
@@ -115,7 +172,8 @@ class _ProfilePageState extends State<ProfilePage> {
     emailAddress = user.email;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
+      body: isLoading ? Loading() : 
+      SafeArea(
         child: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.all(20.0),

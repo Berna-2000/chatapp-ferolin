@@ -1,4 +1,3 @@
-import 'package:chatapp_ferolin/models/user.dart';
 import 'package:chatapp_ferolin/services/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

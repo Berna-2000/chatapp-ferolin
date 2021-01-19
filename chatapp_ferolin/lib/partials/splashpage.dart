@@ -15,12 +15,12 @@ class _Splash extends State<Splash> {
   dynamic isVerified;
   @override
   void initState() {
-    super.initState();
     Timer(Duration(seconds: 5), (){
       isVerified = checkOnSignin();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
     });
+    super.initState();
   }
 
   @override

@@ -1,4 +1,3 @@
-import 'package:chatapp_ferolin/views/changePassword.dart';
 import 'package:chatapp_ferolin/views/verify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,9 +7,7 @@ import '../partials/sizeconfig.dart';
 showSuccessMessage(BuildContext context, String success){
   String content;
   if(success == "reset"){
-    content = "Email has been sent to your email address.";
-  }else if (success == "changed"){
-    content = "Your password reset was successful.";
+    content = "An e-mail to reset your password has been sent to your email address.";
   }else{
     content = "Sign up successful. Verification email sent.";
   }
@@ -45,19 +42,9 @@ showSuccessMessage(BuildContext context, String success){
             onPressed: () {
               if(success == "reset"){
                 Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChangePasswordPage()),
-                );
               }else if (success == "verify"){
                 Navigator.of(context)
                   .pushReplacement(MaterialPageRoute(builder: (context)=>VerifyPage()));
-              }else{
-                Navigator.of(context).pop();
-                //do something to update the password
-
-                //go back to the Login Page
-                Navigator.pushNamed(context, '/login');
               }
             },
           )

@@ -1,7 +1,10 @@
+import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/partials/sizeconfig.dart';
+import 'package:chatapp_ferolin/services/authentication.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
-import '../partials/submitForgotPassword.dart';
+import '../partials/errorAlert.dart';
+import '../partials/successAlert.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   @override
@@ -10,6 +13,7 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   String emailAddress;
+  bool isLoading = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Widget _buildEmailRow(){
     return SizedBox(
@@ -60,8 +64,22 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           height: 6 * SizeConfig.heightMultiplier,
           width: 0.85 * MediaQuery.of(context).size.width,
           child: RaisedButton(
-            onPressed: () {
-              submitForgotPassowrd(context, _formKey);
+            onPressed: () async {
+              //sends the reset password email
+              AuthenticationMethods authMethods = new AuthenticationMethods();
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                authMethods.resetPassword(emailAddress);
+                setState(() {
+                  isLoading = true;
+                });
+                String success = "reset";
+                showSuccessMessage(context, success);
+                Navigator.of(context).pop();
+              }else{
+                String error = "missing";
+                showErrorMessage(context, error);
+              }
             },
             elevation: 5.0,
             color: Color(0xfff1976d2), 
@@ -90,7 +108,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         backgroundColor: Color(0xfff1976d2), 
         title: Text("ChatLoop Reset Password"),
       ),
-      body: Container(
+      body: isLoading ? Loading() : 
+      Container(
         padding: EdgeInsets.all(20.0),
         height: SizeConfig.screenHeight,
         child: Form(

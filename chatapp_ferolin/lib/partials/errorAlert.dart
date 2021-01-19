@@ -1,3 +1,4 @@
+import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../partials/sizeconfig.dart';
@@ -7,6 +8,7 @@ import '../services/authentication.dart';
 showErrorMessage(BuildContext context, String error){
   final AuthenticationMethods authMethods = new AuthenticationMethods();
   String content;
+  bool isVerified = false;
   if(error == "missing"){
     content = "Missing Fields.";
   }else if (error == "email"){
@@ -47,6 +49,8 @@ showErrorMessage(BuildContext context, String error){
             onPressed: () {
               if(error!="missing" && error!="email" && error!="account"){
                 //sends another verification email
+                Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
                 authMethods.verifyEmail();
               }
               Navigator.of(context).pop();

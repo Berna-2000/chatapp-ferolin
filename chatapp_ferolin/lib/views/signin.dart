@@ -218,11 +218,9 @@ class _LoginPageState extends State<LoginPage> {
                   dynamic isVerified = await authMethods.checkVerfiedEmail();
                   print(isVerified);
                   if(isVerified != true){
-                    //TODO: something to do when the email is not verified
                     String error = "verified";
                     showErrorMessage(context, error);
                   }else{
-                    //TODO: something to do when the email is verified
                     Navigator.of(context)
                       .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
                   }
