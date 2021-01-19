@@ -10,10 +10,9 @@ class AuthenticationMethods{
     return user != null ? UserClass(userId:user.uid): null;
   }
 
-  //Auth change user stream
-  Stream<UserClass> get user{
-    return _auth.authStateChanges()
-      .map(_userFromFirebaseUser);
+  //Auth change user stream (UserClass ni cya sauna)
+  Stream<User> get user{
+    return _auth.authStateChanges();
   }
 
   //Sign in With Email and Password
@@ -23,8 +22,10 @@ class AuthenticationMethods{
         email: email,
         password: password
       );
+      // User firebaseUser = _auth.currentUser;
       User firebaseUser = result.user;
-      return _userFromFirebaseUser(firebaseUser);
+      return firebaseUser;
+      // return _userFromFirebaseUser(firebaseUser);
     }on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -45,8 +46,10 @@ class AuthenticationMethods{
         email: email,
         password: password
       );
-      User firebaseUser = result.user;
-      return _userFromFirebaseUser(firebaseUser);
+      // User firebaseUser = result.user;
+      // return _userFromFirebaseUser(firebaseUser);
+      User firebaseUser = result.user;   
+      return firebaseUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -100,6 +103,17 @@ class AuthenticationMethods{
     }catch(e){
       print(e.toString());
       return null;
+    }
+  }
+
+  //Update User's Profile
+  Future updateProfile(String username, String photo) async {
+    User user = _auth.currentUser;
+    try{
+      user.updateProfile();
+      await user.updateProfile(displayName: username, photoURL: photo).then((value) => print(photo));
+    }catch(e){
+      print(e.toString());
     }
   }
 }

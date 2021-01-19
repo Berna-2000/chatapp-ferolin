@@ -14,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // initializes Firebase app
   await Firebase.initializeApp();
-  runApp(StreamProvider<UserClass>.value(
+  runApp(StreamProvider<User>.value(
     value: AuthenticationMethods().user,
     child: MaterialApp(
       debugShowCheckedModeBanner: false,

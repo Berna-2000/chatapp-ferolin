@@ -1,3 +1,4 @@
+import 'package:chatapp_ferolin/models/appUsers.dart';
 import '../common/packages.dart';
 
 class UserController {
@@ -12,4 +13,30 @@ class UserController {
       'deleted': false,
     });
   }
+
+  List<AppUser> _userList(QuerySnapshot snapshot) {
+    try {
+      return snapshot.docs.map((doc) {
+        return AppUser(
+          username: doc.data()['username'],
+          emailAddress: doc.data()['emailAddress'],
+          displayPhoto: doc.data()['displayPhoto'],
+          uid: doc.id
+        );
+      }).toList();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Stream<List<AppUser>> get retrieveAllOperators {
+    try {
+      return users.snapshots().map(_userList);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+  
 }

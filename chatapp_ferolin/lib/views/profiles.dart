@@ -1,3 +1,4 @@
+import 'package:chatapp_ferolin/common/packages.dart';
 import 'package:chatapp_ferolin/partials/confirmSignout.dart';
 import 'package:chatapp_ferolin/services/authentication.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,11 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final AuthenticationMethods authMethods = new AuthenticationMethods();
+  String name = "Default User", 
+         emailAddress = "defaultuser@email.com", 
+         displayPhoto = "";
 
-  Widget _buildProfilePhoto(){
+  Widget _buildProfilePhoto(displayPhoto){
     return Container(
       decoration: const BoxDecoration(
         border: Border(
@@ -35,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100.0),
           child: Image.asset(
-            'assets/images/default.png',
+            displayPhoto,
             width: 50 * SizeConfig.imageSizeMultiplier,
           ),
         )
@@ -43,11 +47,11 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildName(){
+  Widget _buildName(String name){
     return Padding(
       padding: EdgeInsets.only(top: 10.0),
       child: Text(
-        'Default User',
+        name,
         style: TextStyle(
           color: Color(0xfffa0a0a0),
           fontWeight: FontWeight.w900,
@@ -57,10 +61,10 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildEmailAddress(){
+  Widget _buildEmailAddress(String emailAddress){
     return Container(
       child: Text(
-        'defaultuser@email.com',
+        emailAddress,
         style: TextStyle(
           color: Color(0xfffa0a0a0),
           fontWeight: FontWeight.bold,
@@ -105,6 +109,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+    name = user.displayName;
+    displayPhoto = user.photoURL;
+    emailAddress = user.email;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -117,9 +125,9 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                _buildProfilePhoto(),
-                _buildName(),
-                _buildEmailAddress(),
+                _buildProfilePhoto(displayPhoto),
+                _buildName(name),
+                _buildEmailAddress(emailAddress),
                 _buildSignout(),
               ],
             )

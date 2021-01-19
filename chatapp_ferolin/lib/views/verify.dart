@@ -15,6 +15,7 @@ class _VerifyPageState extends State<VerifyPage> {
   Timer timer;
   User user;
   final _auth = FirebaseAuth.instance;
+  bool status = false;
 
   @override
   void initState(){
@@ -75,8 +76,9 @@ class _VerifyPageState extends State<VerifyPage> {
       setState(() {
         timer.cancel();
       });
+      status = true;
       Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper()));
+        .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: status)));
     }
   }
 }

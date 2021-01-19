@@ -273,6 +273,7 @@ class _SignupPageState extends State<SignupPage> {
             onPressed: () async {
               //submit registration
               String uid;
+              String photo = "assets/images/default.png";
               AuthenticationMethods authmethods = new AuthenticationMethods();
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
@@ -286,7 +287,8 @@ class _SignupPageState extends State<SignupPage> {
                     setState(() {
                       isLoading = true;
                     });
-                    uid = "${result.userId}";
+                    uid = "${result.uid}";
+                    await authmethods.updateProfile(username, photo);
                     UserController().createUser(uid, emailAddress, username);
                     String success = "verify";
                     showSuccessMessage(context, success);

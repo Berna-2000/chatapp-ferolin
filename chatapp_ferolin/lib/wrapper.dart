@@ -12,17 +12,14 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserClass>(context);
+    final user = Provider.of<User>(context);
     // return authentication screen or home screen
-    print(status);
     if (user == null) {
       return Authenticate();
     } else {  
       if(status == true){
-        print("To main page");
         return MainPage();
       }else{
-        print("To Authenticate page");
         return Authenticate();
       }
     }
