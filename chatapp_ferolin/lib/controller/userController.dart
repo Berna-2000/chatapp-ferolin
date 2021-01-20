@@ -17,5 +17,29 @@ class UserController {
   getUsersByEmailAddress(String emailAddress){
     
   }
-  
+
+  List<AppUser> _usersList(QuerySnapshot snapshot) {
+    try {
+      return snapshot.docs.map((doc) {
+        return AppUser(
+          username: doc.data()['username'],
+          emailAddress: doc.data()['emailAddress'],
+          displayPhoto: doc.data()['displayPhoto'],
+          uid: doc.id,
+        );
+      }).toList();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Stream<List<AppUser>> get retrieveAllUsers {
+    try {
+      return users.snapshots().map(_usersList);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 }

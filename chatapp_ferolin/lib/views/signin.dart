@@ -28,6 +28,12 @@ class _LoginPageState extends State<LoginPage> {
   //   super.dispose();
   // }
 
+  changeState(state){
+    setState(() {
+      isLoading = state;
+    });
+  }
+
   Widget _buildHeaderWelcome(BuildContext context){
     return Container(
       child: Row(
@@ -198,7 +204,6 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         Container (
           height: 6 * SizeConfig.heightMultiplier,
-          // width: 0.8 * SizeConfig.screenWidth,
           width: 0.85 * MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(bottom: 0.0),
           child: RaisedButton(
@@ -206,22 +211,20 @@ class _LoginPageState extends State<LoginPage> {
               // submitLogin(context, _formKey, emailAddress, password);
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
+                changeState(true);
                 final AuthenticationMethods authMethods = AuthenticationMethods();
                 //Calls on the email authentication
                 dynamic result = await authMethods.signinWithEmailandPassword(emailAddress, password);
                 if(result == null){
+                  changeState(false);
                   String error = "account";
                   showErrorMessage(context, error);
                 }else{
-                  setState(() {
-                    isLoading = true;
-                  });
                   dynamic isVerified = await authMethods.checkVerfiedEmail();
                   if(isVerified != true){
+                    changeState(false);
                     String error = "verified";
                     showErrorMessage(context, error);
-                    Navigator.of(context)
-                      .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
                   }else{
                     Navigator.of(context)
                       .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));

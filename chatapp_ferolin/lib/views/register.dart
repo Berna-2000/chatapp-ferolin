@@ -30,6 +30,12 @@ class _SignupPageState extends State<SignupPage> {
   //   super.dispose();
   // }
 
+  changeState(state){
+    setState(() {
+      isLoading = state;
+    });
+  }
+
   Widget _buildHeaderWelcome(BuildContext context){
     return Container(
       child: Row(
@@ -277,13 +283,12 @@ class _SignupPageState extends State<SignupPage> {
               AuthenticationMethods authmethods = new AuthenticationMethods();
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                setState(() {
-                  isLoading = true;
-                });
+                changeState(true);
                 //Navigate to Home Page
                 try{
                   dynamic result = await authmethods.signupWithEmailAndPassword(emailAddress, password);
                   if (result == null){
+                    changeState(false);
                     String error = "email";
                     showErrorMessage(context, error);
                   }else{
