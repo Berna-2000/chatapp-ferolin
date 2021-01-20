@@ -15,6 +15,8 @@ showErrorMessage(BuildContext context, String error){
     content = "This e-mail address is already in use. Try another one.";
   }else if (error == "account"){
     content = "No account exists for the given e-mail address. Check your inputs.";
+  }else if (error == "self"){
+    content = "You are not allowed to add your own self.";
   }else{
     content = "E-mail not verified. Sent another verification email.";
   }

@@ -1,5 +1,4 @@
 import 'package:chatapp_ferolin/common/packages.dart';
-import 'package:chatapp_ferolin/partials/confirmSignout.dart';
 import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/services/authentication.dart';
 import 'package:flutter/material.dart';

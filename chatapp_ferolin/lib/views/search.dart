@@ -26,6 +26,7 @@ class _SearchPageState extends State<SearchPage> {
             child: TextFormField(
               controller: searchHolder,
               textInputAction: TextInputAction.search,
+              keyboardType: TextInputType.emailAddress,
               onSaved: (input) => searchEmail = input,
               onChanged: (value){
                 if(value.isNotEmpty){
@@ -38,7 +39,7 @@ class _SearchPageState extends State<SearchPage> {
                 });
               },
               onFieldSubmitted: (input) {
-                //TODO: some code to search for the user here
+                //changes the view to retrieve results of the query
                 setState(() {
                   isEntered = true;
                 });
@@ -57,14 +58,18 @@ class _SearchPageState extends State<SearchPage> {
                   },
                   icon: Icon(Icons.cancel),
                 ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue[400]),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
                 hintText: 'Search user email',
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[400]),
-                  borderRadius: BorderRadius.circular(15.0),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black),
-                  borderRadius: BorderRadius.circular(15.0),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
             ),
@@ -97,13 +102,17 @@ class _SearchPageState extends State<SearchPage> {
           value: UserController().retrieveAllUsers,
           child: Container(
             padding: EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildSearchBar(),
-                isEntered ? _buildSearchResults() : Container(color: Colors.amber, child: Text("FONKY MONKY FRIDAY")),
-              ],
+            child: Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _buildSearchBar(),
+                    isEntered ? _buildSearchResults() : Container(color: Colors.amber, child: Text("FONKY MONKY FRIDAY")),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
