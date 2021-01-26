@@ -1,6 +1,7 @@
 import 'package:chatapp_ferolin/common/packages.dart';
 import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/services/authentication.dart';
+import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import '../partials/sizeconfig.dart';
 
@@ -136,7 +137,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPressed: () async {
                           //code to actually sign out
                           await authmethods.signOut();
+                          SharedPreferences usernamePreferences = await SharedPreferences.getInstance();
+                          usernamePreferences.clear();
                           Navigator.of(context).pop();
+                          // Navigator.of(context)
+                          //   .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: false)));
                         },
                       ),
                     ]

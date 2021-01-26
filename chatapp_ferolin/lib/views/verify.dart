@@ -76,6 +76,8 @@ class _VerifyPageState extends State<VerifyPage> {
       setState(() {
         timer.cancel();
       });
+      SharedPreferences usernamePreferences = await SharedPreferences.getInstance();
+      usernamePreferences.setString('currentUser', user.email);
       status = true;
       Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: status)));

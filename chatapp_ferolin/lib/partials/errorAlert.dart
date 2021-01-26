@@ -1,8 +1,10 @@
+import 'package:chatapp_ferolin/common/packages.dart';
 import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../partials/sizeconfig.dart';
 import '../services/authentication.dart';
+import 'package:provider/provider.dart';
 
 
 showErrorMessage(BuildContext context, String error){
@@ -49,7 +51,8 @@ showErrorMessage(BuildContext context, String error){
               )
             ),
             onPressed: () {
-              if(error!="missing" && error!="email" && error!="account"){
+              if(error!="missing" && error!="email" && error!="account" && error!="self"){
+                final user = authMethods.getCurrentUser();
                 //sends another verification email
                 Navigator.of(context)
                       .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));

@@ -294,7 +294,7 @@ class _SignupPageState extends State<SignupPage> {
                   }else{
                     uid = "${result.uid}";
                     await authmethods.updateProfile(username, photo);
-                    UserController().createUser(uid, emailAddress, username);
+                    UserController().createUser(uid, emailAddress, username, 'assets/images/default.png');
                     String success = "verify";
                     showSuccessMessage(context, success);
                   }

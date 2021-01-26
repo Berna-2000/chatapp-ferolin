@@ -1,10 +1,12 @@
 import 'package:chatapp_ferolin/partials/errorAlert.dart';
 import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/partials/sizeconfig.dart';
+import 'package:chatapp_ferolin/views/chatPage.dart';
 import 'package:chatapp_ferolin/views/noResultPage.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
 import '../models/appUsers.dart';
+import '../partials/addToContacts.dart';
 
 class UsersList extends StatefulWidget {
   final emailAddress;
@@ -36,6 +38,10 @@ class _UsersListState extends State<UsersList> {
               //1. Check if user is already in contact... 
               //2. if yes, then don't add. 
               //3. Otherwise, add.
+              // showAddToContactAlert(context, userDisplay[index].username);
+              Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context)=>
+                ChatPage(chattedUser: userDisplay[index].username, currentUser: user.displayName)));
             }
           },
           child: Container(
@@ -49,6 +55,22 @@ class _UsersListState extends State<UsersList> {
             padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
             child: Row(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100.0),
+                        child: Image.asset(
+                          userDisplay[index].displayPhoto,
+                          height: 12 * SizeConfig.imageSizeMultiplier,
+                        ),
+                      )
+                    )
+                  ],
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,

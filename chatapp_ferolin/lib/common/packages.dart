@@ -8,3 +8,4 @@ export 'package:firebase_core/firebase_core.dart';
 export 'package:provider/provider.dart';
 export 'package:flutter_spinkit/flutter_spinkit.dart';
 export 'dart:async';
+export 'package:shared_preferences/shared_preferences.dart';

@@ -99,7 +99,8 @@ class AuthenticationMethods{
   //Sign Out Function
   Future signOut() async{
     try{
-      return await _auth.signOut();
+      await _auth.signOut();
+      return null;
     }catch(e){
       print(e.toString());
       return null;
@@ -115,5 +116,10 @@ class AuthenticationMethods{
     }catch(e){
       print(e.toString());
     }
+  }
+
+  Future getCurrentUser() async {
+    // return _auth.currentUser;
+    print(_auth.currentUser.email);
   }
 }

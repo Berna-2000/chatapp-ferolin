@@ -5,17 +5,13 @@ class UserController {
   CollectionReference users =
       FirebaseFirestore.instance.collection('users');
 
-  createUser(String uid, String emailAddress, String username){
+  createUser(String uid, String emailAddress, String username, String displayPhoto){
     return users.doc(uid).set({
       'username': username,
       'emailAddress': emailAddress,
-      'displayPhoto': 'assets/images/default.png',
+      'displayPhoto': displayPhoto,
       'deleted': false,
     });
-  }
-
-  getUsersByEmailAddress(String emailAddress){
-    
   }
 
   List<AppUser> _usersList(QuerySnapshot snapshot) {

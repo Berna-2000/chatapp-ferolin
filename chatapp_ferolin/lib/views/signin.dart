@@ -226,6 +226,8 @@ class _LoginPageState extends State<LoginPage> {
                     String error = "verified";
                     showErrorMessage(context, error);
                   }else{
+                    SharedPreferences usernamePreferences = await SharedPreferences.getInstance();
+                    usernamePreferences.setString('currentUser', emailAddress);
                     Navigator.of(context)
                       .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
                   }

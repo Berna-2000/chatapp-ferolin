@@ -1,9 +1,9 @@
 import 'package:chatapp_ferolin/controller/userController.dart';
 import 'package:chatapp_ferolin/models/appUsers.dart';
 import 'package:chatapp_ferolin/partials/usersList.dart';
+import 'package:chatapp_ferolin/views/initialSearchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../partials/sizeconfig.dart';
 import '../common/packages.dart';
 
 class SearchPage extends StatefulWidget {
@@ -40,10 +40,12 @@ class _SearchPageState extends State<SearchPage> {
               },
               onFieldSubmitted: (input) {
                 //changes the view to retrieve results of the query
-                setState(() {
-                  isEntered = true;
-                });
-                searchEmail = input;
+                if(input.isNotEmpty){
+                  setState(() {
+                    isEntered = true;
+                  });
+                  searchEmail = input;
+                }
               },
               decoration: InputDecoration(
                 suffixIcon: isEmpty ? Icon(Icons.search_outlined) : 
@@ -109,7 +111,7 @@ class _SearchPageState extends State<SearchPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _buildSearchBar(),
-                    isEntered ? _buildSearchResults() : Container(color: Colors.amber, child: Text("FONKY MONKY FRIDAY")),
+                    isEntered ? _buildSearchResults() : InitialSearchPage(),
                   ],
                 ),
               ),
