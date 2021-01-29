@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../common/packages.dart';
 import '../models/appUsers.dart';
 import '../partials/addToContacts.dart';
+import '../controller/chatroomController.dart';
 
 class UsersList extends StatefulWidget {
   final emailAddress;
@@ -16,6 +17,7 @@ class UsersList extends StatefulWidget {
 }
 
 class _UsersListState extends State<UsersList> {
+  String chatroomId;
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +31,26 @@ class _UsersListState extends State<UsersList> {
       itemCount: userDisplay.length,
       itemBuilder: (context, index){
         return GestureDetector(
-          onTap: () {
+          onTap: () async {
             if(user.email == userDisplay[index].emailAddress){
               String error = "self";
               showErrorMessage(context, error);
             }else{
-              //TODO: 
-              //1. Check if user is already in contact... 
-              //2. if yes, then don't add. 
-              //3. Otherwise, add.
-              // showAddToContactAlert(context, userDisplay[index].username);
-              Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context)=>
-                ChatPage(chattedUser: userDisplay[index].username, currentUser: user.displayName)));
+              chatroomId = ChatroomController()
+                .generateChatroomId(userDisplay[index].username, user.displayName);
+
+              //some code to check if the chat ID is present in the DB
+              dynamic doesExist = await ChatroomController().checkIfContactExists(chatroomId);
+              if(doesExist == null){
+                showAddToContactAlert(
+                  context, 
+                  userDisplay[index], 
+                  user, 
+                  chatroomId); 
+              }else{
+                String error = "connected";
+                showErrorMessage(context, error);
+              }
             }
           },
           child: Container(

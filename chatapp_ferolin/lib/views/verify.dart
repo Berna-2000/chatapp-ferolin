@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:chatapp_ferolin/views/mainpage.dart';
 import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import '../partials/sizeconfig.dart';
@@ -21,7 +22,7 @@ class _VerifyPageState extends State<VerifyPage> {
   void initState(){
     user = _auth.currentUser;
     user.sendEmailVerification();
-    timer = Timer.periodic(Duration(seconds: 5), (timer) { 
+    timer = Timer.periodic(Duration(seconds: 3), (timer) { 
      checkEmailVerified();
     });
     super.initState();
@@ -81,6 +82,8 @@ class _VerifyPageState extends State<VerifyPage> {
       status = true;
       Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: status)));
+      // Navigator.of(context)
+        // .pushReplacement(MaterialPageRoute(builder: (context)=> MainPage()));
     }
   }
 }

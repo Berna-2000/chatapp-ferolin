@@ -4,6 +4,8 @@ import 'package:chatapp_ferolin/services/authentication.dart';
 import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import '../partials/sizeconfig.dart';
+import '../common/packages.dart';
+
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -15,7 +17,28 @@ class _ProfilePageState extends State<ProfilePage> {
   String name = "Default User", 
          emailAddress = "defaultuser@email.com", 
          displayPhoto = "";
-  bool isLoading = false;
+  bool isLoading = true;
+  User currentUser;
+  Timer timer;
+
+  @override
+  void initState(){
+    // timer = Timer.periodic(Duration(seconds: 1), (timer) { 
+    //  _getCurrentUser();
+    // });
+    _getCurrentUser();
+    super.initState();
+  }
+
+  _getCurrentUser() async {
+    await authMethods.getCurrentUser().then((result){
+      currentUser = result;
+      setState(() {
+        // timer.cancel();
+        isLoading = false;
+      });
+    });
+  }
 
   Widget _buildProfilePhoto(displayPhoto){
     return Container(
@@ -91,6 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
               });
               //some code to sign out 
               final AuthenticationMethods authmethods = new AuthenticationMethods();
+              bool isVerified;
               showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -121,9 +145,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         onPressed: () {
                           setState(() {
+                            isVerified = false;
                             isLoading = false;
                           });
                           Navigator.of(context).pop();
+                          Navigator.of(context)
+                            .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
                         },
                       ),
                       FlatButton(
@@ -140,8 +167,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           SharedPreferences usernamePreferences = await SharedPreferences.getInstance();
                           usernamePreferences.clear();
                           Navigator.of(context).pop();
-                          // Navigator.of(context)
-                          //   .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: false)));
+                          Navigator.of(context)
+                            .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: false)));
                         },
                       ),
                     ]
@@ -170,10 +197,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-    name = user.displayName;
-    displayPhoto = user.photoURL;
-    emailAddress = user.email;
+    // final user = Provider.of<User>(context);
+    // name = user.displayName;
+    // displayPhoto = "assets/images/default.png";
+    // emailAddress = user.email;
     return Scaffold(
       backgroundColor: Colors.white,
       body: isLoading ? Loading() : 
@@ -187,9 +214,9 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                _buildProfilePhoto(displayPhoto),
-                _buildName(name),
-                _buildEmailAddress(emailAddress),
+                _buildProfilePhoto(currentUser.photoURL),
+                _buildName(currentUser.displayName),
+                _buildEmailAddress(currentUser.email),
                 _buildSignout(),
               ],
             )

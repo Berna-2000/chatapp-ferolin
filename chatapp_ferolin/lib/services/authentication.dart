@@ -111,15 +111,14 @@ class AuthenticationMethods{
   Future updateProfile(String username, String photo) async {
     User user = _auth.currentUser;
     try{
-      user.updateProfile();
       await user.updateProfile(displayName: username, photoURL: photo).then((value) => print(photo));
     }catch(e){
       print(e.toString());
     }
   }
 
+  //Get current user
   Future getCurrentUser() async {
-    // return _auth.currentUser;
-    print(_auth.currentUser.email);
+    return _auth.currentUser;
   }
 }

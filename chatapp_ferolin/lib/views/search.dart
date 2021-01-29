@@ -67,11 +67,11 @@ class _SearchPageState extends State<SearchPage> {
                 hintText: 'Search user email',
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue[400]),
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(100.0),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black),
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(100.0),
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:chatapp_ferolin/common/packages.dart';
+import 'package:chatapp_ferolin/views/mainpage.dart';
 import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +11,10 @@ import 'package:provider/provider.dart';
 showErrorMessage(BuildContext context, String error){
   final AuthenticationMethods authMethods = new AuthenticationMethods();
   String content;
+  String title;
   bool isVerified = false;
+
+  //Creates the dialog content
   if(error == "missing"){
     content = "Missing Fields.";
   }else if (error == "email"){
@@ -19,16 +23,26 @@ showErrorMessage(BuildContext context, String error){
     content = "No account exists for the given e-mail address. Check your inputs.";
   }else if (error == "self"){
     content = "You are not allowed to add your own self.";
+  }else if (error == "connected"){
+    content = "You both already have a connection.";
   }else{
     content = "E-mail not verified. Sent another verification email.";
   }
+
+  //Creates the dialog title
+  if(error == "connected"){
+    title = "Failed";
+  }else{
+    title = "Error";
+  }
+
   showDialog(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text(
-          'Error',
+          title,
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontFamily: "Montserrat"
@@ -51,12 +65,15 @@ showErrorMessage(BuildContext context, String error){
               )
             ),
             onPressed: () {
-              if(error!="missing" && error!="email" && error!="account" && error!="self"){
-                final user = authMethods.getCurrentUser();
+              if(error == "verified"){
+                // final user = authMethods.getCurrentUser();
                 //sends another verification email
                 Navigator.of(context)
                       .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
                 authMethods.verifyEmail();
+              }else if (error == "connected"){
+                Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
               }
               Navigator.of(context).pop();
             },
