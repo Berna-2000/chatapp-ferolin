@@ -59,7 +59,10 @@ class ChatroomController {
     });
   }
 
-  retrieveChatroomMessages(String chatroomID) async {
-    return ;
+  Future<Stream<QuerySnapshot>> retrieveChatroomMessages(String chatroomID) async{
+    return chatroom.doc(chatroomID)
+      .collection("chats")
+      .orderBy("sentTime", descending: false)
+      .snapshots();
   }
 }

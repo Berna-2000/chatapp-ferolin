@@ -1,6 +1,7 @@
 import 'package:chatapp_ferolin/controller/chatroomController.dart';
 import 'package:chatapp_ferolin/models/chatroom.dart';
 import 'package:chatapp_ferolin/partials/sizeconfig.dart';
+import '../partials/loadingPage.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
 import '../models/appUsers.dart';
@@ -19,19 +20,31 @@ class _ChatPageState extends State<ChatPage> {
   String message;
   String messageId = "";
   TextEditingController messageHolder = TextEditingController();
+  bool isFirstTime = true;
+  Stream streamMessages;
 
   getAndSetMessages() async {
     //some code to get the messages here
+    streamMessages = await ChatroomController().retrieveChatroomMessages(widget.chatroomId);
+    setState(() {});
+  }
+
+  @override
+  void initState(){
+    getAndSetMessages();
+    super.initState();
   }
 
   Widget _buildMessageBoxRow(){
     return Container(
       alignment: Alignment.bottomCenter,
+      margin: EdgeInsets.only(top: 10.0),
       child: Container(
+        height: 11 * SizeConfig.heightMultiplier,
         constraints: BoxConstraints(
           maxHeight: 15 * SizeConfig.heightMultiplier
         ),
-        color: Colors.black.withOpacity(0.2),
+        color: Colors.grey,
         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
         child: Row(
           children: [
@@ -102,6 +115,8 @@ class _ChatPageState extends State<ChatPage> {
                   //clears the message field
                   setState(() {
                     messageHolder.clear();
+                    isFirstTime = false;
+                    // FocusScope.of(context).unfocus();
                   });
                   messageId = "";
                 }
@@ -109,6 +124,63 @@ class _ChatPageState extends State<ChatPage> {
             )
           ],
         )
+      ),
+    );
+  }
+
+  Widget _buildMessages(){
+    return StreamBuilder(
+      stream: streamMessages,
+      builder: (context, snapshot){
+        if(!snapshot.hasData){
+          return Loading();
+        }else{
+          isFirstTime = false;
+        }
+        return Container(
+          margin: EdgeInsets.only(bottom: 10.0),
+          child: ListView.builder(
+            padding: EdgeInsets.only(bottom: 70.0, top: 16.0),
+            itemCount: snapshot.data.docs.length,
+            shrinkWrap: true,
+            // reverse: true,
+            itemBuilder: (context, index){
+              DocumentSnapshot messageSnapshot = snapshot.data.docs[index];
+              // return _buildChatMessageTile(messageSnapshot['message']);
+              return Container(
+                margin: EdgeInsets.only(bottom: 10.0),
+                child: _buildChatMessageTile(messageSnapshot['message']),
+              );
+            }
+          )
+        );
+      }
+    );
+  }
+
+  Widget _buildChatMessageTile(String thisMessage){
+    return Container(
+      color: Colors.lightGreen[400],
+      margin: EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.all(10.0),
+      child: Text(
+        thisMessage,
+      )
+    );
+  }
+
+  Widget _buildEmptyConversation(){
+    return Container(
+      padding: EdgeInsets.all(20.0),
+      child: Center(
+        child: Text(
+          "You can now start a conversation with this person.",
+          style: TextStyle(
+            fontFamily: "Montserrat",
+            fontSize: 3 * SizeConfig.textMultiplier,
+          ),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
@@ -137,19 +209,14 @@ class _ChatPageState extends State<ChatPage> {
         body: Container(
           height: SizeConfig.screenHeight,
           width: MediaQuery.of(context).size.width,
-          // child: Container(
-          //   child: SingleChildScrollView(
-          //     child: Column(
-          //       mainAxisAlignment: MainAxisAlignment.start,
-          //       crossAxisAlignment: CrossAxisAlignment.stretch,
-          //       children: [
-                  
-          //       ],
-          //     ),
-          //   ),
-          // ),
           child: Stack(
             children: [
+              // Container(
+              //   child: SingleChildScrollView(
+              //     child: _buildMessages(),
+              //   )
+              // ),
+              isFirstTime ? _buildEmptyConversation() : _buildMessages(),
               _buildMessageBoxRow(),
             ],
           ),

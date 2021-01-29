@@ -1,7 +1,5 @@
 import 'package:chatapp_ferolin/partials/errorAlert.dart';
-import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/partials/sizeconfig.dart';
-import 'package:chatapp_ferolin/views/chatPage.dart';
 import 'package:chatapp_ferolin/views/noResultPage.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';

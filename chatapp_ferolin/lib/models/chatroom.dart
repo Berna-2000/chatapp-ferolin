@@ -1,5 +1,3 @@
-import 'package:chatapp_ferolin/common/packages.dart';
-
 class Chatroom {
   // String chatroomId;
 
