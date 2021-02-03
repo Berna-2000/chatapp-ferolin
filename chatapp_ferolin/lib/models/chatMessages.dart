@@ -1,5 +1,3 @@
-import 'package:chatapp_ferolin/common/packages.dart';
-
 class ChatMessages {
   String messageId;
   String message;

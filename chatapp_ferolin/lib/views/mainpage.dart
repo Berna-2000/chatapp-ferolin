@@ -1,8 +1,6 @@
 import 'package:chatapp_ferolin/views/contacts.dart';
 import 'package:chatapp_ferolin/views/profiles.dart';
 import 'package:flutter/material.dart';
-import '../common/packages.dart';
-import '../partials/sizeconfig.dart';
 
 class MainPage extends StatefulWidget {
   @override

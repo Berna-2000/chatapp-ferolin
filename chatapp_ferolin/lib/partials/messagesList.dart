@@ -1,11 +1,6 @@
-import 'package:chatapp_ferolin/partials/errorAlert.dart';
 import 'package:chatapp_ferolin/partials/sizeconfig.dart';
-import 'package:chatapp_ferolin/views/noResultPage.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
-import '../models/appUsers.dart';
-import 'addToContacts.dart';
-import '../controller/chatroomController.dart';
 
 class MessagesList extends StatefulWidget {
   final streamMessages;

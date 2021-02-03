@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:chatapp_ferolin/views/mainpage.dart';
 import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import '../partials/sizeconfig.dart';
@@ -82,8 +81,6 @@ class _VerifyPageState extends State<VerifyPage> {
       status = true;
       Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: status)));
-      // Navigator.of(context)
-        // .pushReplacement(MaterialPageRoute(builder: (context)=> MainPage()));
     }
   }
 }

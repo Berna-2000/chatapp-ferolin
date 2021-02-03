@@ -52,6 +52,7 @@ class _UsersListState extends State<UsersList> {
             }
           },
           child: Container(
+            margin: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               border: Border.all(
                 width: 1.0,
@@ -60,42 +61,44 @@ class _UsersListState extends State<UsersList> {
               borderRadius: BorderRadius.circular(10.0),
             ),
             padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-            child: Row(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100.0),
-                        child: Image.asset(
-                          userDisplay[index].displayPhoto,
-                          height: 12 * SizeConfig.imageSizeMultiplier,
-                        ),
+            child: Expanded(
+              child: Row(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100.0),
+                          child: Image.network(
+                            userDisplay[index].displayPhoto,
+                            height: 12 * SizeConfig.imageSizeMultiplier,
+                          ),
+                        )
                       )
-                    )
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userDisplay[index].username,
-                      style: TextStyle(
-                        fontSize: 2.75 * SizeConfig.textMultiplier, 
-                        fontFamily: "Montserrat",
-                        fontWeight: FontWeight.w300,
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        userDisplay[index].username,
+                        style: TextStyle(
+                          fontSize: 2.75 * SizeConfig.textMultiplier, 
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
-                    ),
-                    Text(
-                      userDisplay[index].emailAddress,
-                    ),
-                  ],
-                ),
-              ],
+                      Text(
+                        userDisplay[index].emailAddress,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );

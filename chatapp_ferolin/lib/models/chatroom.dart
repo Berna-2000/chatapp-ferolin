@@ -5,6 +5,7 @@ class Chatroom {
   String lastMessage;
   DateTime lastMessageSentTime;
   String lastMessageSender;
+  String uid;
 
-  Chatroom({this.lastMessage, this.lastMessageSentTime, this.lastMessageSender});
+  Chatroom({this.users, this.lastMessage, this.lastMessageSentTime, this.lastMessageSender, this.uid});
 }

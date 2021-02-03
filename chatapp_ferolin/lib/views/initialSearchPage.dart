@@ -1,7 +1,5 @@
-import 'package:chatapp_ferolin/partials/noResult.dart';
 import 'package:chatapp_ferolin/partials/sizeconfig.dart';
 import 'package:flutter/material.dart';
-import '../common/packages.dart';
 
 class InitialSearchPage extends StatefulWidget {
   @override

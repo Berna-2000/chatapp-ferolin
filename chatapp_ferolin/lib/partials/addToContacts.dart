@@ -1,10 +1,10 @@
 import 'package:chatapp_ferolin/controller/chatroomController.dart';
+import 'package:chatapp_ferolin/views/chatroomPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../partials/sizeconfig.dart';
 import '../models/appUsers.dart';
 import '../common/packages.dart';
-import '../views/chatPage.dart';
 
 
 showAddToContactAlert(BuildContext context, AppUser addedUser, User currentUser, String chatID){
@@ -55,9 +55,9 @@ showAddToContactAlert(BuildContext context, AppUser addedUser, User currentUser,
               ChatroomController().createChatroom(chatID, users);
               Navigator.of(context).pop();
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context)=>
-                  ChatPage(
-                    chattedUser: addedUser, 
+                  .pushReplacement(MaterialPageRoute(builder: (context)=>
+                  ChatRoomPage(
+                    chattedUser: addedUser.username, 
                     currentUser: currentUser, 
                     chatroomId: chatID)));
             },

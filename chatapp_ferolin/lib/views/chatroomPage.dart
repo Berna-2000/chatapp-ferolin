@@ -1,27 +1,26 @@
 import 'package:chatapp_ferolin/controller/chatroomController.dart';
 import 'package:chatapp_ferolin/models/chatroom.dart';
 import 'package:chatapp_ferolin/partials/sizeconfig.dart';
-import '../partials/loadingPage.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
-import '../models/appUsers.dart';
 import '../models/chatMessages.dart';
 
-class ChatPage extends StatefulWidget {
-  final AppUser chattedUser;
+class ChatRoomPage extends StatefulWidget {
+  final String chattedUser;
   final User currentUser;
   final chatroomId;
-  ChatPage({this.chattedUser, this.currentUser, this.chatroomId});
+  ChatRoomPage({this.chattedUser, this.currentUser, this.chatroomId});
   @override
-  _ChatPageState createState() => _ChatPageState();
+  _ChatRoomPageState createState() => _ChatRoomPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatRoomPageState extends State<ChatRoomPage> {
   String message;
   String messageId = "";
   TextEditingController messageHolder = TextEditingController();
   bool isFirstTime = true;
   Stream streamMessages;
+  ScrollController _controller = ScrollController();
 
   getAndSetMessages() async {
     //some code to get the messages here
@@ -32,6 +31,13 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState(){
     getAndSetMessages();
+    setState(() {
+      Timer(
+        Duration(milliseconds: 300),
+        () => _controller
+          .jumpTo(_controller.position.maxScrollExtent)
+      );
+    });
     super.initState();
   }
 
@@ -40,9 +46,10 @@ class _ChatPageState extends State<ChatPage> {
       alignment: Alignment.bottomCenter,
       margin: EdgeInsets.only(top: 10.0),
       child: Container(
-        height: 11 * SizeConfig.heightMultiplier,
+        height: 10 * SizeConfig.heightMultiplier,
         constraints: BoxConstraints(
-          maxHeight: 15 * SizeConfig.heightMultiplier
+          minHeight: 10 * SizeConfig.heightMultiplier,
+          // maxHeight: 14 * SizeConfig.heightMultiplier,
         ),
         color: Colors.grey,
         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
@@ -50,20 +57,37 @@ class _ChatPageState extends State<ChatPage> {
           children: [
             Expanded(
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 3.0),
+                padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 3.0),
                 color: Colors.white,
                 child: TextField(
+                  onTap: () {
+                    setState(() {
+                      Timer(
+                        Duration(milliseconds: 300),
+                        () => _controller
+                          .jumpTo(_controller.position.maxScrollExtent)
+                      );
+                    });
+                  },
+                  // expands: true,
+                  keyboardType: TextInputType.multiline,
+                  textCapitalization: TextCapitalization.sentences,
                   controller: messageHolder,
                   decoration: InputDecoration(
-                    border: InputBorder.none,
+                    // border: InputBorder.none,
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey,),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey,),
+                    ),
                     fillColor: Colors.white,
                     filled: true,
                     hintText: "Write your message here...",
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
                   ),
-                  keyboardType: TextInputType.multiline,
                   maxLength: 240,
-                  maxLines: null,
+                  maxLines: 3,
                   onChanged: (input){
                     if(input.length > 240){
                       //some code to stop the user from writing
@@ -110,6 +134,12 @@ class _ChatPageState extends State<ChatPage> {
                       );
                     //Updates the Chatroom Details
                     ChatroomController().updateLastMessageSent(widget.chatroomId, chatroomUpdates);
+                    //Scrolls to the end of the message
+                    Timer(
+                      Duration(milliseconds: 10),
+                      () => _controller
+                        .jumpTo(_controller.position.maxScrollExtent)
+                    );
                   });
 
                   //clears the message field
@@ -133,23 +163,21 @@ class _ChatPageState extends State<ChatPage> {
       stream: streamMessages,
       builder: (context, snapshot){
         if(!snapshot.hasData){
-          return Loading();
-        }else{
-          isFirstTime = false;
+          return _buildEmptyConversation();
         }
         return Container(
-          margin: EdgeInsets.only(bottom: 10.0),
+          margin: EdgeInsets.only(bottom: 8.0), // 10 supposed to be
           child: ListView.builder(
+            controller: _controller,
             padding: EdgeInsets.only(bottom: 70.0, top: 16.0),
             itemCount: snapshot.data.docs.length,
             shrinkWrap: true,
-            // reverse: true,
             itemBuilder: (context, index){
               DocumentSnapshot messageSnapshot = snapshot.data.docs[index];
-              // return _buildChatMessageTile(messageSnapshot['message']);
               return Container(
                 margin: EdgeInsets.only(bottom: 10.0),
-                child: _buildChatMessageTile(messageSnapshot['message']),
+                child: _buildChatMessageTile(messageSnapshot['message'], 
+                         widget.currentUser.displayName == messageSnapshot['sender']),
               );
             }
           )
@@ -158,19 +186,39 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  Widget _buildChatMessageTile(String thisMessage){
-    return Container(
-      color: Colors.lightGreen[400],
-      margin: EdgeInsets.symmetric(horizontal: 16.0),
-      padding: EdgeInsets.all(10.0),
-      child: Text(
-        thisMessage,
-      )
+  Widget _buildChatMessageTile(String thisMessage, bool sentByMe){
+    return Row(
+      mainAxisAlignment: 
+          sentByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        Container(
+          constraints: BoxConstraints(
+            maxWidth: 0.8 * MediaQuery.of(context).size.width,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              bottomRight: 
+                  sentByMe ? Radius.zero : Radius.circular(20.0),
+              topRight: Radius.circular(20.0),
+              bottomLeft: 
+                  sentByMe ? Radius.circular(20.0) : Radius.zero,
+            ),
+            color: sentByMe ? Colors.lightGreen[400] : Color(0xfff9bcafa),
+          ),
+          margin: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.all(10.0),
+          child: Text(
+            thisMessage,
+          )
+        ),
+      ]
     );
   }
 
   Widget _buildEmptyConversation(){
     return Container(
+      alignment: Alignment.center,
       padding: EdgeInsets.all(20.0),
       child: Center(
         child: Text(
@@ -192,7 +240,7 @@ class _ChatPageState extends State<ChatPage> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Color(0xfff1976d2), 
-          title: Text(widget.chattedUser.username),
+          title: Text(widget.chattedUser),
           automaticallyImplyLeading: false,
           actions: [
             Container(
@@ -210,16 +258,12 @@ class _ChatPageState extends State<ChatPage> {
           height: SizeConfig.screenHeight,
           width: MediaQuery.of(context).size.width,
           child: Stack(
+            // mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // Container(
-              //   child: SingleChildScrollView(
-              //     child: _buildMessages(),
-              //   )
-              // ),
-              isFirstTime ? _buildEmptyConversation() : _buildMessages(),
+              _buildMessages(),
               _buildMessageBoxRow(),
             ],
-          ),
+          )
         ),
       )
     );

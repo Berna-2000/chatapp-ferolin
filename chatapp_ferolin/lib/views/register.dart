@@ -1,6 +1,5 @@
 import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/partials/successAlert.dart';
-import '../views/verify.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
 import '../partials/sizeconfig.dart';
@@ -20,7 +19,6 @@ class _SignupPageState extends State<SignupPage> {
   bool _isHidden = true, isLoading = false;
   IconData iconP = Icons.remove_red_eye_sharp;
   User user;
-  final _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // final TextEditingController _passwordController = TextEditingController();
 
@@ -279,7 +277,7 @@ class _SignupPageState extends State<SignupPage> {
             onPressed: () async {
               //submit registration
               String uid;
-              String photo = "assets/images/default.png";
+              String photo = "https://img.lovepik.com/element/45001/6381.png_860.png";
               AuthenticationMethods authmethods = new AuthenticationMethods();
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
@@ -294,7 +292,7 @@ class _SignupPageState extends State<SignupPage> {
                   }else{
                     uid = "${result.uid}";
                     await authmethods.updateProfile(username, photo);
-                    UserController().createUser(uid, emailAddress, username, 'assets/images/default.png');
+                    UserController().createUser(uid, emailAddress, username, photo);
                     String success = "verify";
                     showSuccessMessage(context, success);
                   }

@@ -1,6 +1,7 @@
 import '../common/packages.dart';
 import '../models/chatMessages.dart';
 import '../models/chatroom.dart';
+import '../services/authentication.dart';
 
 class ChatroomController {
   CollectionReference chatroom =
@@ -65,4 +66,14 @@ class ChatroomController {
       .orderBy("sentTime", descending: false)
       .snapshots();
   }
-}
+
+  Future<Stream<QuerySnapshot>> retrieveChatrooms() async {
+    String currentUser;
+    dynamic user = await AuthenticationMethods().getCurrentUser();
+    currentUser = user.displayName;
+    return chatroom
+      .orderBy("lastMessageSentTime", descending: true)
+      .where("users", arrayContains: currentUser)
+      .snapshots();
+  }
+} 

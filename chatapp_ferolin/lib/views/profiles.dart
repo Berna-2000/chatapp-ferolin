@@ -33,6 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
   _getCurrentUser() async {
     await authMethods.getCurrentUser().then((result){
       currentUser = result;
+      print(currentUser.photoURL);
       setState(() {
         // timer.cancel();
         isLoading = false;
@@ -63,8 +64,9 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100.0),
-          child: Image.asset(
-            displayPhoto,
+          
+          child: Image.network(
+            "https://img.lovepik.com/element/45001/6381.png_860.png",
             width: 50 * SizeConfig.imageSizeMultiplier,
           ),
         )
@@ -199,7 +201,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     // final user = Provider.of<User>(context);
     // name = user.displayName;
-    // displayPhoto = "assets/images/default.png";
     // emailAddress = user.email;
     return Scaffold(
       backgroundColor: Colors.white,

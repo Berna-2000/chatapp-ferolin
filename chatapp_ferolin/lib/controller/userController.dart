@@ -38,4 +38,16 @@ class UserController {
       return null;
     }
   }
+
+
+  Future<QuerySnapshot> retrieveUserofChatroom(String emailAddress) async {
+    try{
+      return users
+        .where("emailAddress", isEqualTo: emailAddress)
+        .get();
+    } catch(e) {
+      print(e.toString());
+      return null;
+    }
+  }
 }
