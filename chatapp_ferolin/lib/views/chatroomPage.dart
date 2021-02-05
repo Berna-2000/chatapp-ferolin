@@ -1,6 +1,7 @@
 import 'package:chatapp_ferolin/controller/chatroomController.dart';
 import 'package:chatapp_ferolin/models/chatroom.dart';
 import 'package:chatapp_ferolin/partials/sizeconfig.dart';
+import 'package:chatapp_ferolin/views/emptyConversation.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
 import '../models/chatMessages.dart';
@@ -9,7 +10,8 @@ class ChatRoomPage extends StatefulWidget {
   final String chattedUser;
   final User currentUser;
   final chatroomId;
-  ChatRoomPage({this.chattedUser, this.currentUser, this.chatroomId});
+  final hasNoConversation;
+  ChatRoomPage({this.chattedUser, this.currentUser, this.chatroomId, this.hasNoConversation});
   @override
   _ChatRoomPageState createState() => _ChatRoomPageState();
 }
@@ -21,6 +23,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   bool isFirstTime = true;
   Stream streamMessages;
   ScrollController _controller = ScrollController();
+  bool hasNoConversation = true;
+  var numberOfMessages;
 
   getAndSetMessages() async {
     //some code to get the messages here
@@ -28,9 +32,15 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     setState(() {});
   }
 
+  checkMessageBox() async {
+    numberOfMessages = await ChatroomController().checkChatroomMessages(widget.chatroomId);
+    setState(() {});
+  }
+
   @override
   void initState(){
     getAndSetMessages();
+    checkMessageBox();
     setState(() {
       Timer(
         Duration(milliseconds: 300),
@@ -116,13 +126,17 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 if(message.isNotEmpty){
                   var messageSent = DateTime.now();
                   messageId = ChatroomController().generateMessageId();
+                  //create chatRoom
+                  // List<String> users = [widget.chattedUser, widget.currentUser.displayName];
+                  // ChatroomController().createChatroom(widget.chatroomId, users);
+                  //code to retrieve other information
                   ChatMessages newMessage = 
                     new ChatMessages(
                       messageId: messageId,
                       message: message,
                       sender: widget.currentUser.displayName,
                       sentTime: messageSent,
-                      displayPhoto: widget.currentUser.photoURL,
+                      displayPhoto: widget.currentUser.photoURL, ///HEYYYY CHECK HERE!!
                     );
                   //Adds the message to the database
                   ChatroomController().addMessage(widget.chatroomId, newMessage).then((value){
@@ -137,13 +151,18 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     //Scrolls to the end of the message
                     Timer(
                       Duration(milliseconds: 10),
-                      () => _controller
-                        .jumpTo(_controller.position.maxScrollExtent)
+                      (){ 
+                        _controller
+                          .jumpTo(_controller.position.maxScrollExtent);
+                      }
                     );
                   });
-
+                  
                   //clears the message field
                   setState(() {
+                    //Checks number of messages
+                    checkMessageBox();
+                    hasNoConversation = false;
                     messageHolder.clear();
                     isFirstTime = false;
                     // FocusScope.of(context).unfocus();
@@ -163,7 +182,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       stream: streamMessages,
       builder: (context, snapshot){
         if(!snapshot.hasData){
-          return _buildEmptyConversation();
+          return EmptyConversation();
         }
         return Container(
           margin: EdgeInsets.only(bottom: 8.0), // 10 supposed to be
@@ -175,9 +194,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             itemBuilder: (context, index){
               DocumentSnapshot messageSnapshot = snapshot.data.docs[index];
               return Container(
-                margin: EdgeInsets.only(bottom: 10.0),
+                margin: EdgeInsets.only(bottom: 5.0),
                 child: _buildChatMessageTile(messageSnapshot['message'], 
-                         widget.currentUser.displayName == messageSnapshot['sender']),
+                        widget.currentUser.displayName == messageSnapshot['sender']),
               );
             }
           )
@@ -187,7 +206,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   }
 
   Widget _buildChatMessageTile(String thisMessage, bool sentByMe){
-    return Row(
+    return thisMessage == "" ? Container() :
+    Row(
       mainAxisAlignment: 
           sentByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
@@ -216,25 +236,9 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
     );
   }
 
-  Widget _buildEmptyConversation(){
-    return Container(
-      alignment: Alignment.center,
-      padding: EdgeInsets.all(20.0),
-      child: Center(
-        child: Text(
-          "You can now start a conversation with this person.",
-          style: TextStyle(
-            fontFamily: "Montserrat",
-            fontSize: 3 * SizeConfig.textMultiplier,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    hasNoConversation = widget.hasNoConversation;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -260,7 +264,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           child: Stack(
             // mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              // hasNoConversation ? _buildEmptyConversation() : _buildMessages(),
               _buildMessages(),
+              // hasNoConversation ? EmptyConversation() : Container(),
+              numberOfMessages == null ? Container() : numberOfMessages > 1 ? Container() : EmptyConversation(),
               _buildMessageBoxRow(),
             ],
           )

@@ -22,6 +22,10 @@ showErrorMessage(BuildContext context, String error){
     content = "You are not allowed to add your own self.";
   }else if (error == "connected"){
     content = "You both already have a connection.";
+  }else if (error == "g-registered"){
+    content = "This account already exists.\nPlease sign in to get your account.";
+  }else if (error == "google"){
+    content = "There was an error signing up with your google account.\n Please check your credentials and try again.";
   }else{
     content = "E-mail not verified. Sent another verification email.";
   }

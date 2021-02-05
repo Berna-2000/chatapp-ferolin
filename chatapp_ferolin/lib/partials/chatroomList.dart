@@ -7,8 +7,12 @@ import '../views/chatroomPage.dart';
 import '../partials/loadingPage.dart';
 
 class ChatroomList extends StatefulWidget {
-  final emailAddress, lastMessage, chattedUser, currentUser;
-  ChatroomList({this.emailAddress, this.lastMessage, this.chattedUser, this.currentUser});
+  final emailAddress, lastMessage, chattedUser, currentUser, hasNoConversation;
+  ChatroomList({this.emailAddress, 
+                this.lastMessage, 
+                this.chattedUser, 
+                this.currentUser, 
+                this.hasNoConversation});
   @override
   _ChatroomListState createState() => _ChatroomListState();
 }
@@ -27,10 +31,10 @@ class _ChatroomListState extends State<ChatroomList> {
   getUserInformation() async {
     await UserController().retrieveUserofChatroom(widget.emailAddress)
       .then((result){
-        displayPhoto = result.docs[0]['displayPhoto'];
         username = result.docs[0]['username'];
         isLoading = false;
     });
+    displayPhoto = await UserController().retrieveUserInformationFromUsername(widget.chattedUser);
     setState(() {});
   }
 
@@ -46,7 +50,9 @@ class _ChatroomListState extends State<ChatroomList> {
             ChatRoomPage(
               chattedUser: widget.chattedUser, 
               currentUser: widget.currentUser, 
-              chatroomId: chatroomId)));
+              chatroomId: chatroomId,
+              hasNoConversation: widget.hasNoConversation,
+            )));
       },
       child: Container(
         margin: EdgeInsets.all(10.0),
@@ -58,7 +64,7 @@ class _ChatroomListState extends State<ChatroomList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.0),
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100.0),
                     child: Image.network(
@@ -84,7 +90,7 @@ class _ChatroomListState extends State<ChatroomList> {
                 Container(
                   width: 0.65 * MediaQuery.of(context).size.width,
                   child: Text(
-                    widget.lastMessage,
+                    widget.lastMessage == "" ? "Say hello! 👋" : widget.lastMessage,
                     overflow: TextOverflow.ellipsis,
                   ),
                 )

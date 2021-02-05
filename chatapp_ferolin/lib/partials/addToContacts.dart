@@ -1,4 +1,6 @@
 import 'package:chatapp_ferolin/controller/chatroomController.dart';
+import 'package:chatapp_ferolin/models/chatMessages.dart';
+import 'package:chatapp_ferolin/models/chatroom.dart';
 import 'package:chatapp_ferolin/views/chatroomPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,13 +55,36 @@ showAddToContactAlert(BuildContext context, AppUser addedUser, User currentUser,
               //some code here to create the chat and navigate
               List<String> users = [addedUser.username, currentUser.displayName];
               ChatroomController().createChatroom(chatID, users);
+              var messageSent = DateTime.now();
+              var messageId = ChatroomController().generateMessageId();
+              ChatMessages newMessage = 
+                new ChatMessages(
+                  messageId: messageId,
+                  message: "",
+                  sender: currentUser.displayName,
+                  sentTime: messageSent,
+                  displayPhoto: currentUser.photoURL,
+                );
+              //Adds the message to the database
+              ChatroomController().addMessage(chatID, newMessage).then((value){
+                Chatroom chatroomUpdates = 
+                  new Chatroom(
+                    lastMessage: "",
+                    lastMessageSentTime: messageSent,
+                    lastMessageSender: currentUser.displayName
+                  );
+                //Updates the Chatroom Details
+                ChatroomController().updateLastMessageSent(chatID, chatroomUpdates);
+              });
               Navigator.of(context).pop();
               Navigator.of(context)
-                  .pushReplacement(MaterialPageRoute(builder: (context)=>
+                  .push(MaterialPageRoute(builder: (context)=>
                   ChatRoomPage(
                     chattedUser: addedUser.username, 
                     currentUser: currentUser, 
-                    chatroomId: chatID)));
+                    chatroomId: chatID,
+                    hasNoConversation: true,
+                    )));
             },
           )
         ]

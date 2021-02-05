@@ -1,8 +1,10 @@
 import 'package:chatapp_ferolin/controller/chatroomController.dart';
 import 'package:chatapp_ferolin/controller/userController.dart';
+import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/partials/usersList.dart';
 import 'package:chatapp_ferolin/services/authentication.dart';
 import 'package:chatapp_ferolin/views/noChatroomsPage.dart';
+import 'package:chatapp_ferolin/views/noResultPage.dart';
 import 'package:flutter/material.dart';
 import '../partials/sizeconfig.dart';
 import '../common/packages.dart';
@@ -20,6 +22,7 @@ class _ContactPageState extends State<ContactPage> {
   User user;
   String currentUser;
   String searchEmail = "";
+  dynamic hasNoContact = true;
   bool isEmpty = true;
   bool isEntered = false;
   final searchHolder = TextEditingController();
@@ -28,6 +31,13 @@ class _ContactPageState extends State<ContactPage> {
     user = await AuthenticationMethods().getCurrentUser();
     currentUser = user.displayName;
     streamChatrooms = await ChatroomController().retrieveChatrooms();
+    dynamic checker = await ChatroomController().checkForChatrooms();
+    hasNoContact = checker;
+    // if(checker != false){
+    //   hasNoContact = true;
+    // }else{
+    //   hasNoContact = false;
+    // }
     setState(() {});
   }
 
@@ -35,6 +45,11 @@ class _ContactPageState extends State<ContactPage> {
   void initState(){
     getChatroomList();
     super.initState();
+  }
+
+  onSearchButtonClick(String userEmail) async {
+    streamSearchedUsers = await UserController().getUserbyEmail(userEmail);
+    setState(() {});
   }
 
   Widget _buildSearchBar(){
@@ -46,6 +61,7 @@ class _ContactPageState extends State<ContactPage> {
             child: Icon(Icons.arrow_back),
             onTap: (){
               //some code to go back to the list of contacts
+              getChatroomList();
               setState(() {
                 searchHolder.clear();
                 isEntered = false;
@@ -75,6 +91,7 @@ class _ContactPageState extends State<ContactPage> {
                   isEntered = true;
                 });
                 searchEmail = input;
+                onSearchButtonClick(searchEmail);
               }
             },
             decoration: InputDecoration(
@@ -110,26 +127,96 @@ class _ContactPageState extends State<ContactPage> {
     );
   }
 
+  Widget _buildSearchedUsersList(){
+    return StreamBuilder(
+      stream: streamSearchedUsers,
+      builder: (context, snapshot){
+        if(!snapshot.hasData){
+          return NoResultsPage();
+        }else{
+          return ListView.builder(
+            itemCount: snapshot.data.docs.length,
+            shrinkWrap: true,
+            itemBuilder:(context, index){
+              DocumentSnapshot usersSnapshot = snapshot.data.docs[index];
+              String displayPhoto = usersSnapshot['displayPhoto'];
+              String displayName = usersSnapshot['username'];
+              String userEmail = usersSnapshot['emailAddress'];
+              return _buildSearchedUsersListTile(
+                displayPhoto,
+                displayName,
+                userEmail
+              );
+              // return Image.network(displayPhoto);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildSearchedUsersListTile(String displayPhoto, String displayName, String userEmail){
+    return GestureDetector(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.symmetric(horizontal: 10.0),
+        child: Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: Image.network(
+                  displayPhoto,
+                  height: 12 * SizeConfig.imageSizeMultiplier,
+                ),
+              )
+            ),
+          ],
+        ),
+      ),
+        // child: Row(
+        //   children: [
+        //     Padding(
+        //       padding: EdgeInsets.symmetric(horizontal: 5.0),
+        //       child: ClipRRect(
+        //         borderRadius: BorderRadius.circular(100.0),
+        //         child: Image.network(
+        //           displayPhoto,
+        //           height: 12 * SizeConfig.imageSizeMultiplier,
+        //         ),
+        //       )
+        //     ),
+        //   ],
+        // ),
+    );
+  }
+
   Widget _buildChatroomsListRow(){
     return StreamBuilder(
       stream: streamChatrooms,
       builder: (context,snapshot){
         if(!snapshot.hasData){
-          return NoChatroomsPage();
+          return Loading();
         }
         return ListView.builder(
           itemCount: snapshot.data.docs.length,
           shrinkWrap: true,
           itemBuilder: (context, index){
+            hasNoContact = false;
             DocumentSnapshot chatroomSnapshot = snapshot.data.docs[index];
             String chattedUser = chatroomSnapshot.id.replaceAll(currentUser, "").replaceAll("_", "");
             String emailAddress = user.email;
             String lastMessage = chatroomSnapshot['lastMessage'];
+            var isEmptyMessages = chatroomSnapshot.data().isEmpty;
+            bool hasNoConversation = isEmptyMessages ? true : false;
             return ChatroomList(
-                emailAddress: emailAddress, 
-                lastMessage: lastMessage, 
-                chattedUser: chattedUser,
-                currentUser: user,);
+              emailAddress: emailAddress, 
+              lastMessage: lastMessage, 
+              chattedUser: chattedUser,
+              currentUser: user,
+              hasNoConversation: hasNoConversation,
+            );
           },
         );
       }
@@ -151,9 +238,7 @@ class _ContactPageState extends State<ContactPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   _buildSearchBar(),
-                  Container(
-                    child: isEntered ? UsersList(emailAddress: searchEmail) : _buildChatroomsListRow(), 
-                  )
+                  isEntered ? UsersList(emailAddress: searchEmail) : hasNoContact ? NoChatroomsPage() : _buildChatroomsListRow(),
                 ],
               ),
             ),

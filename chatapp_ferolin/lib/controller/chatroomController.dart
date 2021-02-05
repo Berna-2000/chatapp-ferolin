@@ -26,9 +26,10 @@ class ChatroomController {
   
   createChatroom(String chatroomId, List<String>users){
     return chatroom.doc(chatroomId).set({
-      'users':users,
+      'userArray':users,
       'lastMessage': "",
       'lastMessageSender': "",
+      'lasMessageSentTime': DateTime.now(),
     });
   }
 
@@ -67,13 +68,38 @@ class ChatroomController {
       .snapshots();
   }
 
+  Future checkChatroomMessages(String chatroomID) async {
+    final chatroomState = await chatroom.doc(chatroomID)
+      .collection("chats")
+      .orderBy("sentTime", descending: false)
+      .get();
+    return chatroomState.docs.length;
+  }
+
   Future<Stream<QuerySnapshot>> retrieveChatrooms() async {
-    String currentUser;
+    String thisUser;
     dynamic user = await AuthenticationMethods().getCurrentUser();
-    currentUser = user.displayName;
+    thisUser = user.displayName;
     return chatroom
       .orderBy("lastMessageSentTime", descending: true)
-      .where("users", arrayContains: currentUser)
+      .where("userArray", arrayContains: thisUser)
       .snapshots();
+  }
+
+  Future<bool> checkForChatrooms() async {
+    String thisUser;
+    dynamic user = await AuthenticationMethods().getCurrentUser();
+    thisUser = user.displayName;
+    final checker = await chatroom
+      .orderBy("lastMessageSentTime", descending: true)
+      .where("userArray", arrayContains: thisUser)
+      .get();
+    if(checker.docs.isEmpty){
+      print("No Contacts");
+      return true;
+    }else{
+      print("Already in Contacts");
+      return false;
+    }
   }
 } 

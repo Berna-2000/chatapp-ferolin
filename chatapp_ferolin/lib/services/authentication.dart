@@ -1,3 +1,4 @@
+import 'package:chatapp_ferolin/common/packages.dart';
 import '../models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -121,4 +122,26 @@ class AuthenticationMethods{
   Future getCurrentUser() async {
     return _auth.currentUser;
   }
+
+  //Google Sign up/Sign up
+  signInWithGoogle() async{
+    try{
+      final GoogleSignIn _googleSignin = GoogleSignIn();
+      final GoogleSignInAccount _googleSigninAccount 
+          = await _googleSignin.signIn();
+      final GoogleSignInAuthentication googleSigninAuthentication
+          = await _googleSigninAccount.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleSigninAuthentication.idToken,
+        accessToken: googleSigninAuthentication.accessToken
+      );
+      UserCredential result = await _auth.signInWithCredential(credential);
+      User firebaseUser = result.user;
+      return firebaseUser;
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+  
 }

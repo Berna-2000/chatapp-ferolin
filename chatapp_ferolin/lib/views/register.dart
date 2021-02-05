@@ -1,5 +1,6 @@
 import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/partials/successAlert.dart';
+import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
 import '../common/packages.dart';
 import '../partials/sizeconfig.dart';
@@ -383,7 +384,43 @@ class _SignupPageState extends State<SignupPage> {
           child: SignInButton(
             Buttons.Google,
             text: "Sign up with Google",
-            onPressed: () {},
+            onPressed: () async {
+              //some code here to sign up with google
+              String uid;
+              String photo;
+              String username;
+              String emailAddress;
+              AuthenticationMethods authmethods = new AuthenticationMethods();
+              changeState(true);
+              //Navigate to Home Page
+              try{
+                dynamic result = await authmethods.signInWithGoogle();
+                if (result == null){
+                  changeState(false);
+                  String error = "google";
+                  showErrorMessage(context, error);
+                }else{
+                  // await UserController().trytoSee("murrayangel54@gmail.com");
+                  dynamic doesUserExist = await UserController().doesGoogleUserExist(result.email);
+                  if(doesUserExist == false){
+                    bool isVerified = true;
+                    uid = "${result.uid}";
+                    photo = "${result.photoURL}";
+                    username = "${result.displayName}";
+                    emailAddress = "${result.email}";
+                    UserController().createUser(uid, emailAddress, username, photo);
+                    Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
+                  }else{
+                    changeState(false);
+                    String error = "g-registered";
+                    showErrorMessage(context, error);
+                  }
+                }
+              }catch(e){
+                print(e.toString());
+              }
+            },
           )
         ),
         Container(

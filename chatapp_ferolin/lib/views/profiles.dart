@@ -23,9 +23,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState(){
-    // timer = Timer.periodic(Duration(seconds: 1), (timer) { 
-    //  _getCurrentUser();
-    // });
     _getCurrentUser();
     super.initState();
   }
@@ -64,9 +61,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100.0),
-          
           child: Image.network(
-            "https://img.lovepik.com/element/45001/6381.png_860.png",
+            currentUser.photoURL,
             width: 50 * SizeConfig.imageSizeMultiplier,
           ),
         )

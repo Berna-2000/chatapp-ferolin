@@ -9,5 +9,5 @@ export 'package:provider/provider.dart';
 export 'package:flutter_spinkit/flutter_spinkit.dart';
 export 'dart:async';
 export 'package:shared_preferences/shared_preferences.dart';
-export 'dart:async';
 export 'package:random_string/random_string.dart';
+export 'package:google_sign_in/google_sign_in.dart';

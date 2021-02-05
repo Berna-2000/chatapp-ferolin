@@ -1,3 +1,4 @@
+import 'package:chatapp_ferolin/controller/userController.dart';
 import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/wrapper.dart';
 import 'package:flutter/material.dart';
@@ -315,8 +316,34 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           child: SignInButton(
             Buttons.Google,
-            onPressed: () {
-              //some code here
+            onPressed: () async {
+              //some code here to sign in to google
+              //try and sign in through google
+              //check if user is also in database
+              //if not, send an error
+              //else, send to Wrapper
+              changeState(true);
+              final AuthenticationMethods authMethods = AuthenticationMethods();
+              try{
+                dynamic result = await authMethods.signInWithGoogle();
+                if(result == null){
+                  changeState(false);
+                  String error = "account";
+                  showErrorMessage(context, error);
+                }else{
+                  bool isVerified = true;
+                  dynamic doesUserExist = await UserController().doesGoogleUserExist(result.email);
+                  if(doesUserExist == null){ //if user does not exist in database
+                    String error = "google";
+                    showErrorMessage(context, error);
+                  }else{
+                    Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
+                  }
+                }
+              }catch(e){
+                print(e.toString());
+              }
             },
           ),
         ),

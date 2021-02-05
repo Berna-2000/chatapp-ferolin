@@ -36,7 +36,6 @@ class _UsersListState extends State<UsersList> {
             }else{
               chatroomId = ChatroomController()
                 .generateChatroomId(userDisplay[index].username, user.displayName);
-
               //some code to check if the chat ID is present in the DB
               dynamic doesExist = await ChatroomController().checkIfContactExists(chatroomId);
               if(doesExist == null){
@@ -52,7 +51,9 @@ class _UsersListState extends State<UsersList> {
             }
           },
           child: Container(
-            margin: EdgeInsets.all(10.0),
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             decoration: BoxDecoration(
               border: Border.all(
                 width: 1.0,
@@ -60,47 +61,39 @@ class _UsersListState extends State<UsersList> {
               ),
               borderRadius: BorderRadius.circular(10.0),
             ),
-            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-            child: Expanded(
-              child: Row(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100.0),
-                          child: Image.network(
-                            userDisplay[index].displayPhoto,
-                            height: 12 * SizeConfig.imageSizeMultiplier,
-                          ),
-                        )
-                      )
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        userDisplay[index].username,
-                        style: TextStyle(
-                          fontSize: 2.75 * SizeConfig.textMultiplier, 
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w300,
-                        ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: Image.network(
+                      userDisplay[index].displayPhoto,
+                      height: 12 * SizeConfig.imageSizeMultiplier,
+                    ),
+                  )
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      userDisplay[index].username,
+                      style: TextStyle(
+                        fontSize: 2.75 * SizeConfig.textMultiplier, 
+                        fontFamily: "Montserrat",
+                        fontWeight: FontWeight.w300,
                       ),
-                      Text(
-                        userDisplay[index].emailAddress,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    Text(
+                      userDisplay[index].emailAddress,
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ),
+          )
         );
       }
     );

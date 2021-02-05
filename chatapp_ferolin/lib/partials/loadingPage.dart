@@ -8,7 +8,7 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: SizeConfig.screenHeight,
+      height: SizeConfig.screenHeight * 0.65,
       color: Colors.white,
       child: Center(
         child: SpinKitChasingDots(color: Colors.tealAccent[200]),
