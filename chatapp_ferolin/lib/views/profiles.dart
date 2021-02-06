@@ -40,33 +40,45 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildProfilePhoto(displayPhoto){
     return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          top: BorderSide(width: 7.0, color: Color(0xfff1976d2)),
-          left: BorderSide(width: 7.0, color: Color(0xfff1976d2)),
-          right: BorderSide(width: 7.0, color: Color(0xfff1976d2)),
-          bottom: BorderSide(width: 7.0, color: Color(0xfff1976d2)),
-        ),
-        borderRadius: BorderRadius.all(Radius.circular(110.0))
-      ),
-      child: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(width: 7.0, color: Color(0xfff60affe)),
-            left: BorderSide(width: 7.0, color: Color(0xfff60affe)),
-            right: BorderSide(width: 7.0, color: Color(0xfff60affe)),
-            bottom: BorderSide(width: 7.0, color: Color(0xfff60affe)),
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(100.0))
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(100.0),
-          child: Image.network(
-            currentUser.photoURL,
-            width: 50 * SizeConfig.imageSizeMultiplier,
-          ),
+      child: CircleAvatar(
+        radius: 100,
+        backgroundColor: Color(0xfff1976d2),
+        child: CircleAvatar(
+          radius: 95,
+          backgroundColor: Color(0xfff60affe),
+          child: CircleAvatar(
+            radius: 90.0,
+            backgroundImage: NetworkImage(currentUser.photoURL),
+          )
         )
-      ),
+      )
+      // decoration: const BoxDecoration(
+      //   border: Border(
+      //     top: BorderSide(width: 7.0, color: Color(0xfff1976d2)),
+      //     left: BorderSide(width: 7.0, color: Color(0xfff1976d2)),
+      //     right: BorderSide(width: 7.0, color: Color(0xfff1976d2)),
+      //     bottom: BorderSide(width: 7.0, color: Color(0xfff1976d2)),
+      //   ),
+      //   borderRadius: BorderRadius.all(Radius.circular(110.0))
+      // ),
+      // child: Container(
+      //   decoration: const BoxDecoration(
+      //     border: Border(
+      //       top: BorderSide(width: 7.0, color: Color(0xfff60affe)),
+      //       left: BorderSide(width: 7.0, color: Color(0xfff60affe)),
+      //       right: BorderSide(width: 7.0, color: Color(0xfff60affe)),
+      //       bottom: BorderSide(width: 7.0, color: Color(0xfff60affe)),
+      //     ),
+      //     borderRadius: BorderRadius.all(Radius.circular(100.0))
+      //   ),
+      //   child: ClipRRect(
+      //     borderRadius: BorderRadius.circular(100.0),
+      //     child: Image.network(
+      //       currentUser.photoURL,
+      //       width: 50 * SizeConfig.imageSizeMultiplier,
+      //     ),
+      //   )
+      // ),
     );
   }
 
