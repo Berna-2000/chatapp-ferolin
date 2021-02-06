@@ -35,6 +35,8 @@ dependencies:
   shared_preferences: ^0.5.12+4
   random_string: ^2.1.0
   google_sign_in: ^4.5.9
+  flutter_login_facebook: ^0.5.0
+  flutter_facebook_auth: "^1.0.0"
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -11,3 +11,5 @@ export 'dart:async';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:random_string/random_string.dart';
 export 'package:google_sign_in/google_sign_in.dart';
+export 'package:flutter_login_facebook/flutter_login_facebook.dart';
+export 'package:flutter_facebook_auth/flutter_facebook_auth.dart';

@@ -427,7 +427,9 @@ class _SignupPageState extends State<SignupPage> {
           child: SignInButton(
             Buttons.FacebookNew,
             text: "Sign up with Facebook",
-            onPressed: () {},
+            onPressed: () async {
+              //some code to register with facebook
+            },
           )
         ),
       ],

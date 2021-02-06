@@ -4,7 +4,6 @@ import 'package:chatapp_ferolin/partials/loadingPage.dart';
 import 'package:chatapp_ferolin/partials/usersList.dart';
 import 'package:chatapp_ferolin/services/authentication.dart';
 import 'package:chatapp_ferolin/views/noChatroomsPage.dart';
-import 'package:chatapp_ferolin/views/noResultPage.dart';
 import 'package:flutter/material.dart';
 import '../partials/sizeconfig.dart';
 import '../common/packages.dart';
@@ -124,71 +123,6 @@ class _ContactPageState extends State<ContactPage> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildSearchedUsersList(){
-    return StreamBuilder(
-      stream: streamSearchedUsers,
-      builder: (context, snapshot){
-        if(!snapshot.hasData){
-          return NoResultsPage();
-        }else{
-          return ListView.builder(
-            itemCount: snapshot.data.docs.length,
-            shrinkWrap: true,
-            itemBuilder:(context, index){
-              DocumentSnapshot usersSnapshot = snapshot.data.docs[index];
-              String displayPhoto = usersSnapshot['displayPhoto'];
-              String displayName = usersSnapshot['username'];
-              String userEmail = usersSnapshot['emailAddress'];
-              return _buildSearchedUsersListTile(
-                displayPhoto,
-                displayName,
-                userEmail
-              );
-              // return Image.network(displayPhoto);
-            },
-          );
-        }
-      },
-    );
-  }
-
-  Widget _buildSearchedUsersListTile(String displayPhoto, String displayName, String userEmail){
-    return GestureDetector(
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.symmetric(horizontal: 10.0),
-        child: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(100.0),
-                child: Image.network(
-                  displayPhoto,
-                  height: 12 * SizeConfig.imageSizeMultiplier,
-                ),
-              )
-            ),
-          ],
-        ),
-      ),
-        // child: Row(
-        //   children: [
-        //     Padding(
-        //       padding: EdgeInsets.symmetric(horizontal: 5.0),
-        //       child: ClipRRect(
-        //         borderRadius: BorderRadius.circular(100.0),
-        //         child: Image.network(
-        //           displayPhoto,
-        //           height: 12 * SizeConfig.imageSizeMultiplier,
-        //         ),
-        //       )
-        //     ),
-        //   ],
-        // ),
     );
   }
 
