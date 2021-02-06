@@ -333,9 +333,10 @@ class _LoginPageState extends State<LoginPage> {
                 }else{
                   bool isVerified = true;
                   dynamic doesUserExist = await UserController().doesGoogleUserExist(result.email);
-                  if(doesUserExist == null){ //if user does not exist in database
+                  if(doesUserExist == false){ //if user does not exist in database
                     String error = "google";
                     showErrorMessage(context, error);
+                    changeState(false);
                   }else{
                     Navigator.of(context)
                       .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));

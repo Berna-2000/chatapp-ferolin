@@ -75,6 +75,9 @@ showErrorMessage(BuildContext context, String error){
               }else if (error == "connected"){
                 Navigator.of(context)
                       .pushReplacement(MaterialPageRoute(builder: (context)=>MainPage()));
+              }else if(error == "google"){
+                Navigator.of(context)
+                      .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));
               }
               Navigator.of(context).pop();
             },

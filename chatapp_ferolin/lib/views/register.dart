@@ -408,6 +408,10 @@ class _SignupPageState extends State<SignupPage> {
                     photo = "${result.photoURL}";
                     username = "${result.displayName}";
                     emailAddress = "${result.email}";
+                    print(username);
+                    print(uid);
+                    print(photo);
+                    print(emailAddress);
                     UserController().createUser(uid, emailAddress, username, photo);
                     Navigator.of(context)
                       .pushReplacement(MaterialPageRoute(builder: (context)=> Wrapper(status: isVerified)));

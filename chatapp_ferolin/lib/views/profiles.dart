@@ -48,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: Color(0xfff60affe),
           child: CircleAvatar(
             radius: 90.0,
-            backgroundImage: NetworkImage(currentUser.photoURL),
+            backgroundImage: NetworkImage(displayPhoto),
           )
         )
       )
